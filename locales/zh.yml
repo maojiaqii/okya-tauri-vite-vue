@@ -1,0 +1,42 @@
+login:
+  login: 登                陆
+  UserCode: 用户名
+  passWord: 密码
+  captcha: 验证码
+  refreshCaptcha: 更换验证码
+  emptyUserCode: 用户名不允许为空！
+  emptyPassWord: 密码不允许为空！
+  emptyCaptcha: 验证码不允许为空！
+button:
+  about: 关于
+  back: 返回
+  go: 确定
+  home: 首页
+  toggle_dark: 切换深色模式
+  toggle_langs: 切换语言
+  minimize: 最小化
+  maximize: 最大化
+  close: 关闭
+  collapse: 折叠
+  expend: 展开
+  close_left: 关闭左侧
+  close_right: 关闭右侧
+  close_others: 关闭其他
+  close_all: 关闭所有
+message:
+  loading: 正在加载,请耐心等待
+  errorCode: 错误码：&nbsp;&nbsp;&nbsp;&nbsp;
+  errorMsg: 错误信息：
+  closeTab: 确认关闭此页签吗？
+  closeLeftTab: 确认关闭左侧所有页签吗？
+  closeRightTab: 确认关闭右侧所有页签吗？
+  closeOtherTab: 确认关闭其它所有页签吗？
+  closeAllTab: 确认关闭所有页签吗？
+  remind: 提示
+component:
+  placeholder_input: 请录入
+  placeholder_select: 请选择
+  placeholder_input_or_select: 请录入或选择
+not-found: 未找到页面
+setting: 设置
+logout: 退出登录

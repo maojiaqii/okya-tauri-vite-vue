@@ -1,0 +1,42 @@
+login:
+  login: Login
+  UserCode: UserCode
+  passWord: PassWord
+  captcha: Code
+  refreshCaptcha: Refresh Captcha
+  emptyUserCode: UserCode cannot be empty!
+  emptyPassWord: PassWord cannot be empty!
+  emptyCaptcha: Code cannot be empty!
+button:
+  about: About
+  back: Back
+  go: GO
+  home: Home
+  toggle_dark: Toggle dark mode
+  toggle_langs: Change languages
+  minimize: Minimize
+  maximize: Maximize
+  close: Close
+  collapse: Collapse
+  expend: Expend
+  close_left: close left tabs
+  close_right: close right tabs
+  close_others: close other tabs
+  close_all: close all tabs
+message:
+  loading: Loading, please wait
+  errorCode: ErrCode：&nbsp;
+  errorMsg: Message：
+  closeTab: proxy will permanently close the tab. Continue?
+  closeLeftTab: proxy will permanently close tabs to the left. Continue?
+  closeRightTab: proxy will permanently close tabs to the right. Continue?
+  closeOtherTab: proxy will permanently close other tabs. Continue?
+  closeAllTab: proxy will permanently close all tabs. Continue?
+  remind: Remind
+component:
+  placeholder_input: please input
+  placeholder_select: please select
+  placeholder_input_or_select: please input or select
+not-found: Not found
+setting: Settings
+logout: Logout

@@ -1,0 +1,4 @@
+<template>
+  <ViewHeader />
+  <ViewBody />
+</template>
