@@ -8,11 +8,8 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ElAside: typeof import('element-plus/es')['ElAside']
-    ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
-    ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
-    ElCollapseTransition: typeof import('element-plus/es')['ElCollapseTransition']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElDialog: typeof import('element-plus/es')['ElDialog']
@@ -43,6 +40,7 @@ declare module 'vue' {
     MExcel: typeof import('./components/Excel/src/MExcel.vue')['default']
     MIconSelect: typeof import('./components/Select/src/MIconSelect.vue')['default']
     MIconSelectHelp: typeof import('./components/Select/md/MIconSelectHelp.md')['default']
+    MInputNumber: typeof import('./components/Input/src/MInputNumber.vue')['default']
     MSelect: typeof import('./components/Select/src/MSelect.vue')['default']
     MSelectHelp: typeof import('./components/Select/md/MSelectHelp.md')['default']
     MSvgIcon: typeof import('./components/SvgIcon/src/MSvgIcon.vue')['default']
