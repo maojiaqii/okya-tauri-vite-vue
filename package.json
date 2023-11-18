@@ -24,7 +24,7 @@
     "qs": "^6.11.2",
     "screenfull": "^6.0.2",
     "vue": "^3.3.8",
-    "vue-i18n": "^9.6.5",
+    "vue-i18n": "^9.7.0",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {

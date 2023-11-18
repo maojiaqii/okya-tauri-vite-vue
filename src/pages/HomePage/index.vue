@@ -14,16 +14,25 @@ function optionSelected(item: any) {
 function change(item: any) {
   console.log(icon.value)
 }
+function inputChange(item: any) {
+  console.log(item)
+}
 </script>
 
 <template>
   <MButton @click="click" name="按钮" />
   <MSelect v-model="asadas" :remote="remote" size="small" filterable collapseTags multiple lazy @optionSelected="optionSelected" />
   <MIconSelect v-model="icon" @change="change" size="large" />
+  <MInput v-model="asadas" type="textarea" :autosize="{ minRows: 2, maxRows: 4 }" :minLength=10 :maxLength=100 />
+  <MInput v-model="asadas" @change="inputChange">
+    <template #prefix>
+      <MSvgIcon icon="translate" />
+    </template>
+    <template #append>
+      asdasdasdasd
+    </template>
+  </MInput>
   <MDialog fullscreen  v-model="aboutVisible">
     <MExcel :containerId="czxcasad" />
   </MDialog>
 </template>
-
-<style lang="scss">
-</style>
