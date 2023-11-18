@@ -10,7 +10,7 @@ export const useAppStore = defineStore('app', {
     const loading = ref(false)
     const menuMode = ref('vertical')
     const menuCollapse = ref(false)
-    const expendWidth = 10
+    const expendWidth = 15
     const collapseWidth = 3.2
     // tabs/breadcrumb
     const viewOpenStyle = ref('breadcrumb')

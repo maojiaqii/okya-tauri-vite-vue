@@ -38,7 +38,9 @@ function cantSpace() {
 async function getKaptcha() {
   login.captchaImage().then((res: ResponseObject) => {
     captchaImg.value = res.img
-    loginForm.uuid = res.uuid
+    if (res.uuid != null) {
+      loginForm.uuid = res.uuid
+    }
   }).catch((e) => {
   })
 }
@@ -65,7 +67,9 @@ async function loginAction() {
         message: `欢迎你,${res.data.asUser.userName}!`,
         duration: 3000,
       })
-      router.push('/layout')
+      nextTick(() => {
+        router.push('/layout')
+      })
     }
     else {
       if (captchaImg.value)

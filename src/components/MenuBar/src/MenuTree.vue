@@ -51,7 +51,12 @@ const handleRoute = debounce((path: string, query: any) => {
 </template>
 
 <style scoped lang="scss">
+  // 解决菜单树折叠后sub-menu图标不显示的bug
+  ::v-deep(.el-sub-menu__title){
+    padding-right: 0!important;
+  }
   .menu-font {
     font-size: 1.5em;
+    margin-left: 0.2em;
   }
 </style>

@@ -4,6 +4,8 @@ declare interface ResponseObject extends AxiosResponse {
   code: number
   msg: string
   data: any
+  img?: string
+  uuid?: string
 }
 
 declare interface RouteObject {
