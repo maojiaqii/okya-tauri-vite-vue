@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const aboutVisible = ref(false)
 const asadas = ref([])
+const inv = ref(0)
 const datas = [{ id: '1', label: 's1' }, { id: '2', label: 's2' }, { id: '3', label: 's3' }, { id: '4', label: 's4' }, { id: '5', label: 's5' }]
 const czxcasad = `M${Number.parseInt((Math.random() * (1000000 - 1) + 1).toString())}`
 const remote = ref('sys_sex')
@@ -32,6 +33,7 @@ function inputChange(item: any) {
       asdasdasdasd
     </template>
   </MInput>
+  <MInputNumber v-model="inv" placeholder="数字" size="large" @change="inputChange" />
   <MDialog fullscreen  v-model="aboutVisible">
     <MExcel :containerId="czxcasad" />
   </MDialog>

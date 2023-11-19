@@ -10,7 +10,7 @@ const props = defineProps({
     type: String,
     default: '#1296db',
   },
-  // 颜色值
+  // 宽高
   size: {
     type: String,
     default: '1.3em',

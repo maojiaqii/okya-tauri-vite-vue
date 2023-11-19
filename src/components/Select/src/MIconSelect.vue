@@ -4,21 +4,34 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  /**
+   * @description 占位内容
+   */
   placeholder: {
     type: String,
     default: undefined,
   },
+  /**
+   * @description 是否禁用
+   */
   disabled: {
     type: Boolean,
     default: false,
   },
+  /**
+   * @description 是否可清空
+   */
   clearable: {
     type: Boolean,
     default: true,
   },
+  /**
+   * @description 控件尺寸
+   */
   size: {
     type: String,
     default: 'default',
+    validator: (val: string) => ['', 'default', 'small', 'large'].includes(val),
   },
 })
 const emits = defineEmits(['update:modelValue'])

@@ -1,6 +1,6 @@
 <div class="text-center">
   <div class="text-4xl -mb-6 m-auto" />
-  <h1>MSvgIcon</h1>
+  <h1>MSelect</h1>
 </div>
 
 <h2>示例</h2>
@@ -11,83 +11,112 @@
 <h2>属性</h2>
 ```js
 {
-  // 绑定数据标志
   modelValue: {
     type: [String, Number, Array],
     default: undefined,
   },
-  // 占位内容标志
+  /**
+   * @description 占位内容
+   */
   placeholder: {
     type: String,
     default: undefined,
   },
-  // 静态数据源标志
+  /**
+   * @description 静态选项内容
+   */
   options: {
     type: Array,
     default: undefined,
   },
-  // 远程数据源（字典代码）标志
+  /**
+   * @description 远程字典代码
+   */
   remote: {
     type: String,
     default: undefined,
   },
-  // 实际值的字段标志
+  /**
+   * @description 实际值的字段标志
+   */
   valueKey: {
     type: String,
     default: 'id',
   },
-  // 显示值的字段标志
+  /**
+   * @description 显示值的字段标志
+   */
   labelKey: {
     type: String,
     default: 'label',
   },
-  // 控件尺寸标志
+  /**
+   * @description 控件尺寸
+   */
   size: {
     type: String,
     default: 'default',
     validator: (val: string) => ['', 'default', 'small', 'large'].includes(val),
   },
-  // 是否禁用标志
+  /**
+   * @description 是否禁用
+   */
   disabled: {
     type: Boolean,
     default: false,
   },
-  // 是否可过滤标志
+  /**
+   * @description 是否可过滤
+   */
   filterable: {
     type: Boolean,
     default: false,
   },
-  // 是否可清空标志
+  /**
+   * @description 是否可清空
+   */
   clearable: {
     type: Boolean,
     default: true,
   },
-  // 是否可新建标志
+  /**
+   * @description 是否可新建
+   */
   allowCreate: {
     type: Boolean,
     default: false,
   },
-  // 是否可多选标志
+  /**
+   * @description 是否多选
+   */
   multiple: {
     type: Boolean,
     default: false,
   },
-  // 是否懒加载标志
+  /**
+   * @description 是否懒加载
+   */
   lazy: {
     type: Boolean,
     default: false,
   },
-  // 懒加载条数标志
+  /**
+   * @description 懒加载每次加载条数
+   */
   lazyCount: {
     type: Number,
     default: 10,
   },
-  // 多选时是否合并选项标志
+  /**
+   * @description 多选时是否合并选项标志
+   */
   collapseTags: {
     type: Boolean,
     default: false,
   },
-  // 超过多少选项时合并标志
+  /**
+   * @description 超过多少选项时合并标志
+   */
   maxCollapseTags: {
     type: Number,
     default: 2,

@@ -4,37 +4,61 @@ const props = defineProps({
     type: [String, Number, Array],
     default: undefined,
   },
+  /**
+   * @description 占位内容
+   */
   placeholder: {
     type: String,
     default: undefined,
   },
+  /**
+   * @description 控件类型
+   */
   type: {
     type: String,
     default: 'text',
     validator: (val: string) => ['text', 'textarea', 'password'].includes(val),
   },
+  /**
+   * @description 控件尺寸
+   */
   size: {
     type: String,
     default: 'default',
     validator: (val: string) => ['', 'default', 'small', 'large'].includes(val),
   },
+  /**
+   * @description 是否禁用
+   */
   disabled: {
     type: Boolean,
     default: false,
   },
+  /**
+   * @description 是否可以被清空
+   */
   clearable: {
     type: Boolean,
     default: true,
   },
+  /**
+   * @description 自动高度
+   */
   autosize: {
     type: [Object, Boolean],
     // eslint-disable-next-line vue/require-valid-default-prop
     default: { minRows: 2, maxRows: 2 },
   },
+  /**
+   * @description 最小长度
+   */
   minLength: {
     type: Number,
     default: undefined,
   },
+  /**
+   * @description 最大长度
+   */
   maxLength: {
     type: Number,
     default: undefined,

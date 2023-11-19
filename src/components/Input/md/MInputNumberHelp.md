@@ -1,7 +1,18 @@
-<script lang="ts" setup>
-const props = defineProps({
+<div class="text-center">
+  <div class="text-4xl -mb-6 m-auto" />
+  <h1>MInputNumber</h1>
+</div>
+
+<h2>示例</h2>
+```html
+<MInputNumber v-model="inv" placeholder="数字" size="large" @change="inputChange" />
+```
+
+<h2>属性</h2>
+```js
+{
   modelValue: {
-    type: Number,
+    type: [String, Number, Array],
     default: undefined,
   },
   /**
@@ -72,31 +83,7 @@ const props = defineProps({
   precision: {
     type: Number,
     validator: (val: number) =>
-      val >= 0 && val === Number.parseInt(`${val}`, 10),
+    val >= 0 && val === Number.parseInt(`${val}`, 10),
   },
-})
-const emits = defineEmits(['update:modelValue'])
-const { locale, t } = useI18n()
-const childValue = computed({
-  get: () => props.modelValue,
-  set: (nv) => {
-    emits('update:modelValue', nv)
-  },
-})
-</script>
-
-<template>
-    <el-input-number v-model="childValue"
-              :size="size"
-              :disabled="disabled"
-              :placeholder="placeholder ? placeholder : t('component.placeholder_input')"
-              :min="min"
-              :max="max"
-              :step="step"
-              :stepStrictly="stepStrictly"
-              :controls="controls"
-              :controls-position="controlsPosition"
-              :precision="precision"
-    >
-    </el-input-number>
-</template>
+}
+```

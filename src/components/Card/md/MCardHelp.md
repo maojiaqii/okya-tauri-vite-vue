@@ -1,7 +1,18 @@
-<script lang="ts" setup>
-import type { CSSProperties } from 'vue'
+<div class="text-center">
+  <div class="text-4xl -mb-6 m-auto" />
+  <h1>MCard</h1>
+</div>
 
-const props = defineProps({
+<h2>示例</h2>
+```html
+<MCard v-show="app.viewTransition" :card-height="cardHeight" shadow="hover" :header="cardTitle" :show-header="app.viewOpenStyle === 'breadcrumb'">
+  <span>1111111111111111111</span>
+</MCard>
+```
+
+<h2>属性</h2>
+```js
+{
   /**
    * @description 内容可视高度
    */
@@ -38,28 +49,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
-</script>
+}
+```
 
-<template>
-  <el-card shadow="hover" :body-style="bodyStyle">
-    <template v-if="showHeader" #header>
-      <span float-left>{{header}}</span>
-      <div float-right>
-        <slot name="header" />
-      </div>
-    </template>
-    <el-scrollbar :height="cardHeight">
-      <slot />
-    </el-scrollbar>
-  </el-card>
-</template>
-
-<style scoped lang="scss">
- ::v-deep(.el-card__header) {
-   overflow: hidden;
-   white-space:nowrap;
-   text-overflow:ellipsis;
-   padding: 10px!important;
- }
-</style>
+<h2>事件</h2>
+```js
+选中值改变回调事件，返回选中值
+change(val: string)
+```

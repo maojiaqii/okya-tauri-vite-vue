@@ -13,27 +13,44 @@
 <h2>属性</h2>
 ```js
 {
-  // 弹窗标题标志
+  /**
+   * @description 弹窗标题
+   */
   title: {
     type: String,
     default: '',
   },
-  // 全屏标志
+  /**
+   * @description 是否允许缩放（按钮）
+   */
+  resizeable: {
+    type: Boolean,
+    default: true,
+  },
+  /**
+   * @description 是否全屏
+   */
   fullscreen: {
     type: Boolean,
     default: false,
   },
-  // 拖动标志
+  /**
+   * @description 是否拖动
+   */
   draggable: {
     type: Boolean,
     default: false,
   },
-  // 打开关闭标志
+  /**
+   * @description 打开关闭
+   */
   modelValue: {
     type: Boolean,
     default: false,
   },
-  // 宽度标志
+  /**
+   * @description 窗体宽度
+   */
   width: {
     type: [String, Number],
     default: '50%',

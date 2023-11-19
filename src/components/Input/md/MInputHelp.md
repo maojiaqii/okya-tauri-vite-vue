@@ -1,6 +1,6 @@
 <div class="text-center">
   <div class="text-4xl -mb-6 m-auto" />
-  <h1>MSvgIcon</h1>
+  <h1>MInput</h1>
 </div>
 
 <h2>示例</h2>
@@ -19,49 +19,65 @@
 <h2>属性</h2>
 ```js
 {
-  // 绑定数据标志
   modelValue: {
     type: [String, Number, Array],
     default: undefined,
   },
-  // 占位内容标志
+  /**
+   * @description 占位内容
+   */
   placeholder: {
     type: String,
     default: undefined,
   },
-  // 控件类型标志
+  /**
+   * @description 控件类型
+   */
   type: {
     type: String,
     default: 'text',
     validator: (val: string) => ['text', 'textarea', 'password'].includes(val),
   },
-  // 控件尺寸标志
+  /**
+   * @description 控件尺寸
+   */
   size: {
     type: String,
     default: 'default',
     validator: (val: string) => ['', 'default', 'small', 'large'].includes(val),
   },
-  // 是否禁用标志
+  /**
+   * @description 是否禁用
+   */
   disabled: {
     type: Boolean,
     default: false,
   },
-  // 是否可清空标志
+  /**
+   * @description 是否可以被清空
+   */
   clearable: {
     type: Boolean,
     default: true,
   },
-  // type=textarea时，高度是否自适应
+  /**
+   * @description 自动高度
+   */
   autosize: {
     type: [Object, Boolean],
+    // eslint-disable-next-line vue/require-valid-default-prop
     default: { minRows: 2, maxRows: 2 },
   },
-  // 最小输入长度标志
+  /**
+   * @description 最小长度
+   */
   minLength: {
     type: Number,
     default: undefined,
   },
-  // 最大输入长度标志
+  /**
+   * @description 最大长度
+   */
   maxLength: {
     type: Number,
     default: undefined,

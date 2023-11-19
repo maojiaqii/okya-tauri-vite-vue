@@ -1,29 +1,47 @@
 <script lang="ts" setup>
 const props = defineProps({
+  /**
+   * @description 弹窗标题
+   */
   title: {
     type: String,
     default: '',
   },
+  /**
+   * @description 是否允许缩放（按钮）
+   */
   resizeable: {
     type: Boolean,
     default: true,
   },
+  /**
+   * @description 是否全屏
+   */
   fullscreen: {
     type: Boolean,
     default: false,
   },
+  /**
+   * @description 是否拖动
+   */
   draggable: {
     type: Boolean,
     default: false,
   },
+  /**
+   * @description 打开关闭
+   */
   modelValue: {
     type: Boolean,
     default: false,
   },
+  /**
+   * @description 窗体宽度
+   */
   width: {
     type: [String, Number],
     default: '50%',
-  },
+  }
 })
 
 const emits = defineEmits(['closed', 'opened', 'update:modelValue'])

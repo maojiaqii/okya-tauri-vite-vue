@@ -11,69 +11,95 @@
 <h2>属性</h2>
 ```js
 {
-  // 按钮名称标志
+  /**
+   * @description 按钮名称
+   */
   name: {
     type: String,
     default: '',
   },
-  // 控件尺寸标志
+  /**
+   * @description 控件尺寸
+   */
   size: {
     type: String,
     default: 'default',
     validator: (val: string) => ['', 'default', 'small', 'large'].includes(val),
   },
-  // 按钮类型标志
+  /**
+   * @description 按钮类型
+   */
   type: {
     type: String,
     default: 'primary',
     validator: (val: string) => ['primary', 'success', 'warning', 'danger', 'info'].includes(val),
   },
-  // 载入状态标志
+  /**
+   * @description 载入状态
+   */
   loading: {
     type: Boolean,
     default: false,
   },
-  // 禁用标志
+  /**
+   * @description 禁用
+   */
   disabled: {
     type: Boolean,
     default: false,
   },
-  // 按钮权限标志
+  /**
+   * @description 按钮权限
+   */
   perms: {
     type: String,
     default: undefined,
   },
-  // 按钮图标标志
+  /**
+   * @description 按钮图标
+   */
   icon: {
     type: String,
     default: undefined,
   },
-  // 朴素按钮标志
+  /**
+   * @description 朴素按钮
+   */
   plain: {
     type: Boolean,
     default: false,
   },
-  // 圆形按钮标志
+  /**
+   * @description 圆形按钮
+   */
   circle: {
     type: Boolean,
     default: false,
   },
-  // 圆角按钮标志
+  /**
+   * @description 圆角按钮
+   */
   round: {
     type: Boolean,
     default: false,
   },
-  // 文字按钮标志
+  /**
+   * @description 文字按钮
+   */
   text: {
     type: Boolean,
     default: false,
   },
-  // 防抖标志
+  /**
+   * @description 防抖
+   */
   debounce: {
     type: Boolean,
     default: true,
   },
-  // 防抖延迟标志（毫秒）
+  /**
+   * @description 防抖延迟（毫秒）
+   */
   delay: {
     type: Number,
     default: 300,
