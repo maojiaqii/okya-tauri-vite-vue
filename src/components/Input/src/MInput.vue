@@ -78,12 +78,13 @@ function changeEvent(val: string) {
 </script>
 
 <template>
-    <el-input v-model="childValue"
-              :size="size"
-              :type="type"
-              :disabled="disabled"
-              :placeholder="placeholder ? placeholder : t('component.placeholder_input')"
-              @change="changeEvent">
+    <el-input
+      v-model="childValue"
+      :size="size"
+      :type="type"
+      :disabled="disabled"
+      :placeholder="placeholder ? placeholder : t('component.placeholder_input')"
+      @change="changeEvent">
       <template v-if="$slots.suffix" #suffix>
         <slot name="suffix" />
       </template>

@@ -37,6 +37,8 @@ component:
   placeholder_input: 请录入
   placeholder_select: 请选择
   placeholder_input_or_select: 请录入或选择
+  placeholder_select_date: 请选择日期
+  placeholder_select_time: 请选择时间
 not-found: 未找到页面
 setting: 设置
 logout: 退出登录

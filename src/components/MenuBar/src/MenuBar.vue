@@ -52,7 +52,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <MButton circle @click="menuCollapse" :icon="app.menuCollapse ? 'right' : 'left'" :name="t(app.menuCollapse ? 'button.expend' : 'button.collapse')"
+  <MButton circle plain @click="menuCollapse" :icon="app.menuCollapse ? 'right' : 'left'" :name="t(app.menuCollapse ? 'button.expend' : 'button.collapse')"
            :style="{ position: 'fixed', zIndex: 99, top: '50%', left: menuButtonLeft, transform: 'translateY(-50%)' }" />
   <el-scrollbar h="full" b-r w="full">
     <el-menu

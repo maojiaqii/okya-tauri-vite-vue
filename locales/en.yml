@@ -37,6 +37,8 @@ component:
   placeholder_input: please input
   placeholder_select: please select
   placeholder_input_or_select: please input or select
+  placeholder_select_date: please select date
+  placeholder_select_time: please select time
 not-found: Not found
 setting: Settings
 logout: Logout

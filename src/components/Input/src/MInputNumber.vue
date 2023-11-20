@@ -75,7 +75,7 @@ const props = defineProps({
       val >= 0 && val === Number.parseInt(`${val}`, 10),
   },
 })
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits(['update:modelValue', 'change'])
 const { locale, t } = useI18n()
 const childValue = computed({
   get: () => props.modelValue,
@@ -83,20 +83,23 @@ const childValue = computed({
     emits('update:modelValue', nv)
   },
 })
+function changeEvent(val: string) {
+  emits('change', val)
+}
 </script>
 
 <template>
-    <el-input-number v-model="childValue"
-              :size="size"
-              :disabled="disabled"
-              :placeholder="placeholder ? placeholder : t('component.placeholder_input')"
-              :min="min"
-              :max="max"
-              :step="step"
-              :stepStrictly="stepStrictly"
-              :controls="controls"
-              :controls-position="controlsPosition"
-              :precision="precision"
-    >
-    </el-input-number>
+  <el-input-number
+    v-model="childValue"
+    :size="size"
+    :disabled="disabled"
+    :placeholder="placeholder ? placeholder : t('component.placeholder_input')"
+    :min="min"
+    :max="max"
+    :step="step"
+    :stepStrictly="stepStrictly"
+    :controls="controls"
+    :controls-position="controlsPosition"
+    :precision="precision"
+    @change="changeEvent" />
 </template>
