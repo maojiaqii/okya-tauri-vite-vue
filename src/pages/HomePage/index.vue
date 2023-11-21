@@ -41,6 +41,7 @@ function inputChange(item: any) {
   <MTimeSelect v-model="tm" format="HH:mm:ss" @change="inputChange" />
   <MDivider content="123321" />
   <MRate v-model="inv" allow-half @change="change" size="large" />
+  <MUpload />
   <MDialog fullscreen  v-model="aboutVisible">
     <MExcel :containerId="czxcasad" />
   </MDialog>
