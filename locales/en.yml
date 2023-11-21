@@ -23,6 +23,7 @@ button:
   close_right: close right tabs
   close_others: close other tabs
   close_all: close all tabs
+  upload: upload
 message:
   loading: Loading, please wait
   errorCode: ErrCode：&nbsp;

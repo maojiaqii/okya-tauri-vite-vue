@@ -40,7 +40,6 @@ declare module 'vue' {
     MButtonHelp: typeof import('./components/Button/md/MButtonHelp.md')['default']
     MCard: typeof import('./components/Card/src/MCard.vue')['default']
     MCardHelp: typeof import('./components/Card/md/MCardHelp.md')['default']
-    MCheckBox: typeof import('./components/CheckBox/src/MCheckBox.vue')['default']
     MColorSelect: typeof import('./components/Select/src/MColorSelect.vue')['default']
     MColorSelectHelp: typeof import('./components/Select/md/MColorSelectHelp.md')['default']
     MDateSelect: typeof import('./components/Select/src/MDateSelect.vue')['default']

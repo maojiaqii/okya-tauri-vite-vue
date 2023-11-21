@@ -23,6 +23,7 @@ button:
   close_right: 关闭右侧
   close_others: 关闭其他
   close_all: 关闭所有
+  upload: 上传文件
 message:
   loading: 正在加载,请耐心等待
   errorCode: 错误码：&nbsp;&nbsp;&nbsp;&nbsp;

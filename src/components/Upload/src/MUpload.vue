@@ -12,7 +12,7 @@ const props = defineProps({
    */
   target: {
     type: String,
-    default: 'http://localhost:3000/upload',
+    default: 'http://localhost:3000/uploadzzz',
   },
   /**
    * @description 分片大小2M/片
@@ -35,9 +35,19 @@ const props = defineProps({
     type: Number,
     default: 3,
   },
+  /**
+   * @description 允许上传的文件类型
+   */
   accept: {
-    type: String,
+    type: Array<String>,
     default: undefined,
+  },
+  /**
+   * @description 是否支持多选文件
+   */
+  multiple: {
+    type: Boolean,
+    default: true,
   },
   /**
    * @description 服务器分片校验函数，秒传及断点续传基础
@@ -71,8 +81,7 @@ const fileStatusText = {
 }
 
 const initProps = computed(() => {
-  console.log(uploadBtnRef.value?.btn.lastElementChild.outerHTML)
-  return { target: props.target, chunkSize: props.chunkSize, fileParameterName: props.fileParameterName, maxChunkRetries: props.maxChunkRetries }
+  return { target: props.target, chunkSize: props.chunkSize, fileParameterName: props.fileParameterName, maxChunkRetries: props.maxChunkRetries, singleFile: !props.multiple }
 })
 
 function onFileAdded(file: any, event: any) {
@@ -91,6 +100,15 @@ function onFileProgress(rootFile: any, file: any, chunk: any) {
 function onFileError(rootFile: any, file: any, message: string, chunk: any) {
   console.log('onFileAdded', rootFile, file, message, chunk)
 }
+
+onMounted(()=>{
+  // 设置允许上传的文件类型
+  nextTick(()=>{
+    if(props.accept){
+      uploadBtnRef.value?.btn.control?.setAttribute('accept', props.accept.join())
+    }
+  })
+})
 </script>
 
 <template>
@@ -108,7 +126,7 @@ function onFileError(rootFile: any, file: any, message: string, chunk: any) {
   >
     <uploader-unsupport></uploader-unsupport>
     <uploader-list>
-      <template #default="{ fileList }">
+      <template #default="{fileList}">
         <div class="file-panel" :class="{ collapse }">
           <div class="file-title">
             <span class="title">{{ title }}</span>
@@ -134,7 +152,30 @@ function onFileError(rootFile: any, file: any, message: string, chunk: any) {
                   :class="[`file_${file.id}`]"
                   :file="file"
                   :list="true"
-                />
+                >
+                  <template #default="obj">
+                    <div class="uploader-file-progress" :class="obj.progressingClass" :style="obj.progressStyle"></div>
+                    <div class="uploader-file-info">
+                      <div class="uploader-file-name"><i class="uploader-file-icon" :icon="obj.fileCategory"></i>{{file.name}}</div>
+                      <div class="uploader-file-size">{{obj.formatedSize}}</div>
+                      <div class="uploader-file-meta"></div>
+                      <div class="uploader-file-status">
+                        <span v-show="obj.status !== 'uploading'">{{statusText}}</span>
+                        <span v-show="obj.status === 'uploading'">
+                          <span>{{obj.progressStyle.progress}}&nbsp;</span>
+                          <em>{{obj.formatedAverageSpeed}}&nbsp;</em>
+                          <i>{{obj.formatedTimeRemaining}}</i>
+                        </span>
+                      </div>
+                      <div class="uploader-file-actions">
+                        <span class="uploader-file-pause" @click="pause"></span>
+                        <span class="uploader-file-resume" @click="resume">️</span>
+                        <span class="uploader-file-retry" @click="retry"></span>
+                        <span class="uploader-file-remove" @click="remove"></span>
+                      </div>
+                    </div>
+                  </template>
+                </uploader-file>
               </li>
               <li v-if="!fileList.length">
                 暂无待上传文件
@@ -146,9 +187,9 @@ function onFileError(rootFile: any, file: any, message: string, chunk: any) {
     </uploader-list>
     <div>
       <uploader-btn id="global-uploader-btn" ref="uploadBtnRef">
-        <a class="uploader-btn-class" :title="t(collapse ? 'button.minimize' : 'button.maximize')">
-          <svg w="0.5em" h="0.5em">
-            <use :xlink:href="`#icon-${collapse ? 'minimize' : 'maximize'}`"/>
+        <a class="uploader-btn-class" :title="t('button.upload')">
+          <svg w="1em" h="1em">
+            <use xlink:href="#icon-upload"/>
           </svg>
         </a>
       </uploader-btn>
@@ -263,7 +304,7 @@ function onFileError(rootFile: any, file: any, message: string, chunk: any) {
 }
 
 #global-uploader-btn {
-  height: 1em;
+  height: 1.5em;
   position: relative;
   background-color: rgb(245, 245, 245, 20%);
   border: 1px dashed lightgrey;
