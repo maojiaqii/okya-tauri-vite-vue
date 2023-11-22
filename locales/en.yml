@@ -24,6 +24,13 @@ button:
   close_others: close other tabs
   close_all: close all tabs
   upload: upload
+  pause: pause
+  start: start
+  retry: retry
+  cancel: cancel
+  remove: remove
+  download: download
+  preview: preview
 message:
   loading: Loading, please wait
   errorCode: ErrCode：&nbsp;

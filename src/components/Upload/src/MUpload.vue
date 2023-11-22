@@ -12,7 +12,7 @@ const props = defineProps({
    */
   target: {
     type: String,
-    default: 'http://localhost:3000/uploadzzz',
+    default: 'http://localhost:3000/upload',
   },
   /**
    * @description 分片大小2M/片
@@ -39,7 +39,7 @@ const props = defineProps({
    * @description 允许上传的文件类型
    */
   accept: {
-    type: Array<String>,
+    type: Array < String >,
     default: undefined,
   },
   /**
@@ -67,7 +67,7 @@ const props = defineProps({
   },
 })
 const emits = defineEmits(['fileAdded'])
-const { t } = useI18n()
+const {t} = useI18n()
 const uploaderRef = ref()
 const uploadBtnRef = ref()
 const files = ref()
@@ -81,7 +81,13 @@ const fileStatusText = {
 }
 
 const initProps = computed(() => {
-  return { target: props.target, chunkSize: props.chunkSize, fileParameterName: props.fileParameterName, maxChunkRetries: props.maxChunkRetries, singleFile: !props.multiple }
+  return {
+    target: props.target,
+    chunkSize: props.chunkSize,
+    fileParameterName: props.fileParameterName,
+    maxChunkRetries: props.maxChunkRetries,
+    singleFile: !props.multiple
+  }
 })
 
 function onFileAdded(file: any, event: any) {
@@ -101,10 +107,10 @@ function onFileError(rootFile: any, file: any, message: string, chunk: any) {
   console.log('onFileAdded', rootFile, file, message, chunk)
 }
 
-onMounted(()=>{
+onMounted(() => {
   // 设置允许上传的文件类型
-  nextTick(()=>{
-    if(props.accept){
+  nextTick(() => {
+    if (props.accept) {
       uploadBtnRef.value?.btn.control?.setAttribute('accept', props.accept.join())
     }
   })
@@ -154,24 +160,59 @@ onMounted(()=>{
                   :list="true"
                 >
                   <template #default="obj">
-                    <div class="uploader-file-progress" :class="obj.progressingClass" :style="obj.progressStyle"></div>
                     <div class="uploader-file-info">
-                      <div class="uploader-file-name"><i class="uploader-file-icon" :icon="obj.fileCategory"></i>{{file.name}}</div>
-                      <div class="uploader-file-size">{{obj.formatedSize}}</div>
+                      <span class="uploader-file-name" :title="file.name"><i class="uploader-file-icon" :icon="obj.fileCategory"></i>{{ file.name }}</span>
+                      <div class="uploader-file-size">{{ obj.formatedSize }}</div>
                       <div class="uploader-file-meta"></div>
                       <div class="uploader-file-status">
-                        <span v-show="obj.status !== 'uploading'">{{statusText}}</span>
-                        <span v-show="obj.status === 'uploading'">
-                          <span>{{obj.progressStyle.progress}}&nbsp;</span>
-                          <em>{{obj.formatedAverageSpeed}}&nbsp;</em>
-                          <i>{{obj.formatedTimeRemaining}}</i>
+                        <span>
+                          <el-progress
+                            :text-inside="true"
+                            :stroke-width="24"
+                            :percentage="obj.progressStyle.progress.replace('%', '')"
+                            status="success"
+                          />
+                          <em v-show="obj.status === 'uploading'">{{ obj.formatedAverageSpeed }}&nbsp;</em>
+                          <i v-show="obj.status === 'uploading'">{{ obj.formatedTimeRemaining }}</i>
+                          {{ statusText }}
                         </span>
                       </div>
                       <div class="uploader-file-actions">
-                        <span class="uploader-file-pause" @click="pause"></span>
-                        <span class="uploader-file-resume" @click="resume">️</span>
-                        <span class="uploader-file-retry" @click="retry"></span>
-                        <span class="uploader-file-remove" @click="remove"></span>
+                        <a class="icon-btn mx-2" :title="t('button.pause')" @click="pause(file, obj)">
+                          <svg w="1em" h="1em">
+                            <use xlink:href="#icon-pause"/>
+                          </svg>
+                        </a>
+                        <a class="icon-btn mx-2" :title="t('button.start')" @click="start(file, obj)">
+                          <svg w="1em" h="1em">
+                            <use xlink:href="#icon-start"/>
+                          </svg>
+                        </a>
+                        <a class="icon-btn mx-2" :title="t('button.retry')" @click="retry(file, obj)">
+                          <svg w="1em" h="1em">
+                            <use xlink:href="#icon-retry"/>
+                          </svg>
+                        </a>
+                        <a class="icon-btn mx-2" :title="t('button.cancel')" @click="cancel(file, obj)">
+                          <svg w="1em" h="1em">
+                            <use xlink:href="#icon-cancel"/>
+                          </svg>
+                        </a>
+                        <a class="icon-btn mx-2" :title="t('button.remove')" @click="remove(file, obj)">
+                          <svg w="1em" h="1em">
+                            <use xlink:href="#icon-close2"/>
+                          </svg>
+                        </a>
+                        <a class="icon-btn mx-2" :title="t('button.download')" @click="download(file, obj)">
+                          <svg w="1em" h="1em">
+                            <use xlink:href="#icon-download"/>
+                          </svg>
+                        </a>
+                        <a class="icon-btn mx-2" :title="t('button.preview')" @click="preview(file, obj)">
+                          <svg w="1em" h="1em">
+                            <use xlink:href="#icon-preview"/>
+                          </svg>
+                        </a>
                       </div>
                     </div>
                   </template>
@@ -212,9 +253,6 @@ onMounted(()=>{
     border-bottom: 1px solid #ddd;
     background-color: var(--c-bg);
 
-    .title {
-    }
-
     .operate {
       flex: 1;
       text-align: right;
@@ -230,39 +268,44 @@ onMounted(()=>{
       background-color: var(--c-bg);
     }
   }
-
-  &.collapse {
-    .file-title {
-      background-color: var(--c-bg);
-    }
-
-    .file-list {
-      height: 0;
-    }
-  }
-}
-
-.no-file {
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #999;
-
-  svg {
-    vertical-align: text-bottom;
-  }
 }
 
 .uploader-file {
-  &.md5 {
-    .uploader-file-resume {
-      display: none;
-    }
-  }
+  height: 1.5em;
+  line-height: 1.5em;
+}
+
+.uploader-file-name {
+  border-right: 1px solid #cdcdcd;
+  width: 40%;
+  overflow: hidden;
+  float: left;
+  display: inline-flex;
+  text-indent: 5px;
+}
+
+.uploader-file-size {
+  width: 6%;
+  border-right: 1px solid #cdcdcd;
+  text-indent: 10px;
+}
+.uploader-file-meta {
+  border-right: 1px solid #cdcdcd;
+  width: 14%;
+}
+.uploader-file-status {
+  border-right: 1px solid #cdcdcd;
+  width: 30%;
+  text-indent: 20px;
+}
+.uploader-file-actions {
+  margin-top: 2px;
 }
 
 .uploader-file-icon {
+  margin-left: 5px;
+  margin-right: 0;
+  margin-top: 2px;
   &:before {
     content: '' !important;
   }
@@ -288,10 +331,6 @@ onMounted(()=>{
     background: url(./images/zip.png) no-repeat center;
     background-size: contain;
   }
-}
-
-.uploader-file-actions > span {
-  margin-right: 6px;
 }
 
 .custom-status {
