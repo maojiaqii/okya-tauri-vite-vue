@@ -1,4 +1,4 @@
-import md5 from 'js-md5'
+import SparkMD5 from 'spark-md5'
 import screenfull from 'screenfull'
 import type { Menu, RouteObject } from '~/types'
 
@@ -6,7 +6,7 @@ function enCodePwd(data: object) {
   if (data && Object.keys(data).length !== 0) {
     for (const key in data) {
       if (key.toLowerCase().includes('password'))
-        data[key] = md5(data[key])
+        data[key] = new SparkMD5().append(data[key]).end()
     }
   }
 }

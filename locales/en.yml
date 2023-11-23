@@ -41,6 +41,16 @@ message:
   closeOtherTab: proxy will permanently close other tabs. Continue?
   closeAllTab: proxy will permanently close all tabs. Continue?
   remind: Remind
+upload-status:
+  success: success
+  error: error
+  uploading: uploading
+  paused: paused
+  waiting: waiting
+  md5: MD5
+  merging: merging
+  transcoding: transcoding
+  failed: failed
 component:
   placeholder_input: please input
   placeholder_select: please select

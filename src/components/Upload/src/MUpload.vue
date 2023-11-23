@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { generateMD5 } from './utils/md5.js'
+
 const props = defineProps({
   /**
    * @description 标题
@@ -39,8 +41,8 @@ const props = defineProps({
    * @description 允许上传的文件类型
    */
   accept: {
-    type: Array < String >,
-    default: undefined,
+    type: [Array<String>, String],
+    default: '*.*',
   },
   /**
    * @description 是否支持多选文件
@@ -65,20 +67,17 @@ const props = defineProps({
     } catch (e) {} */
     return skip
   },
+  query: {
+    type: Object,
+    default: {},
+  },
 })
 const emits = defineEmits(['fileAdded'])
-const {t} = useI18n()
+const { t } = useI18n()
 const uploaderRef = ref()
 const uploadBtnRef = ref()
 const files = ref()
 const collapse = ref(false)
-const fileStatusText = {
-  success: '上传成功',
-  error: '上传失败',
-  uploading: '上传中',
-  paused: '已暂停',
-  waiting: '等待上传',
-}
 
 const initProps = computed(() => {
   return {
@@ -86,34 +85,97 @@ const initProps = computed(() => {
     chunkSize: props.chunkSize,
     fileParameterName: props.fileParameterName,
     maxChunkRetries: props.maxChunkRetries,
-    singleFile: !props.multiple
+    singleFile: !props.multiple,
+    checkChunkUploadedByResponse: props.checkChunkUploadedByResponse,
+    query: props.query,
   }
 })
 
-function onFileAdded(file: any, event: any) {
-  emits('fileAdded', file)
+function fileStatusText(obj: any) {
+  console.log(obj)
+  return t(`upload-status.${obj.file.status}`)
+}
+
+async function onFileAdded(file: any, event: any) {
   console.log('onFileAdded', file, event)
+  emits('fileAdded', file)
+  // 将额外的参数赋值到每个文件上，以不同文件使用不同params的需求
+  file.params = props.query
+  // 计算MD5
+  const md5 = await computeMD5(file)
+  console.log(md5)
+  startUpload(file, md5)
 }
 
 function onFileSuccess(rootFile: any, file: any, message: string, chunk: any) {
+  file.status = 'success'
+  ElNotification.success({
+    message: `文件${file.name}上传成功！`,
+    duration: 3000,
+    position: 'bottom-right',
+  })
   console.log('onFileSuccess', rootFile, file, message, chunk)
 }
 
 function onFileProgress(rootFile: any, file: any, chunk: any) {
+  file.status = 'uploading'
   console.log('onFileProgress', rootFile, file, chunk)
 }
 
 function onFileError(rootFile: any, file: any, message: string, chunk: any) {
+  file.status = 'failed'
+  ElNotification.success({
+    message: `文件${file.name}上传失败！`,
+    duration: 3000,
+    position: 'bottom-right',
+  })
   console.log('onFileAdded', rootFile, file, message, chunk)
 }
 
-onMounted(() => {
-  // 设置允许上传的文件类型
-  nextTick(() => {
-    if (props.accept) {
-      uploadBtnRef.value?.btn.control?.setAttribute('accept', props.accept.join())
-    }
+function computeMD5(file) {
+  // 暂停文件
+  file.pause()
+  // 文件状态设为"计算MD5"
+  file.status = 'md5'
+  // 开始计算MD5
+  return new Promise((resolve, reject) => {
+    generateMD5(file, {
+      onProgress(currentChunk, chunks) {
+        // 实时展示MD5的计算进度
+        nextTick(() => {
+          file.progressNum = ((currentChunk / chunks) * 100).toFixed(0)
+        })
+      },
+      onSuccess(md5, message) {
+        ElNotification.success({
+          message,
+          dangerouslyUseHTMLString: true,
+          duration: 3000,
+          position: 'bottom-right',
+        })
+        file.status = 'paused'
+        resolve(md5)
+      },
+      onError() {
+        ElNotification.success({
+          message: `文件${file.name}读取出错，请检查该文件`,
+          duration: 3000,
+          position: 'bottom-right',
+        })
+        file.status = 'error'
+        // file.cancel()
+        reject()
+      },
+    })
   })
+}
+// md5计算完毕，开始上传
+function startUpload(file, md5) {
+  file.uniqueIdentifier = md5
+  file.resume()
+}
+
+onMounted(() => {
 })
 </script>
 
@@ -123,7 +185,6 @@ onMounted(() => {
     ref="uploaderRef"
     class="uploader-app"
     :options="initProps"
-    :file-status-text="fileStatusText"
     :auto-start="false"
     @file-added="onFileAdded"
     @file-success="onFileSuccess"
@@ -132,14 +193,12 @@ onMounted(() => {
   >
     <uploader-unsupport></uploader-unsupport>
     <uploader-list>
-      <template #default="{fileList}">
+      <template #default="{ fileList }">
         <div class="file-panel" :class="{ collapse }">
           <div class="file-title">
             <span class="title">{{ title }}</span>
             <div class="operate">
-              <a class="icon-btn mx-1" :title="t(collapse ? 'button.minimize' : 'button.maximize')"
-                 @click="collapse = !collapse"
-              >
+              <a class="icon-btn mx-1" :title="t(collapse ? 'button.minimize' : 'button.maximize')" @click="collapse = !collapse">
                 <svg w="1em" h="1em">
                   <use :xlink:href="`#icon-${collapse ? 'minimize' : 'maximize'}`"/>
                 </svg>
@@ -165,51 +224,61 @@ onMounted(() => {
                       <div class="uploader-file-size">{{ obj.formatedSize }}</div>
                       <div class="uploader-file-meta"></div>
                       <div class="uploader-file-status">
-                        <span>
-                          <el-progress
-                            :text-inside="true"
-                            :stroke-width="24"
-                            :percentage="obj.progressStyle.progress.replace('%', '')"
-                            status="success"
-                          />
-                          <em v-show="obj.status === 'uploading'">{{ obj.formatedAverageSpeed }}&nbsp;</em>
-                          <i v-show="obj.status === 'uploading'">{{ obj.formatedTimeRemaining }}</i>
-                          {{ statusText }}
-                        </span>
+                        <el-progress
+                          v-if="obj.file.status === 'uploading' || obj.file.status === 'md5'"
+                          class="upload-progress"
+                          :stroke-width="24"
+                          :percentage="obj.progress || obj.file.progressNum"
+                          status="success"
+                          striped
+                          striped-flow
+                        >
+                          <em v-if="obj.file.status === 'uploading'">{{ obj.formatedAverageSpeed }}&nbsp;</em>
+                          <i v-if="obj.file.status === 'uploading'">{{ obj.formatedTimeRemaining }}</i>
+                          <span v-if="obj.file.status !== 'uploading'">{{ `${obj.progress || obj.file.progressNum}% ${fileStatusText(obj)}` }}</span>
+                        </el-progress>
+                        <span v-else>{{ fileStatusText(obj) }}</span>
                       </div>
                       <div class="uploader-file-actions">
-                        <a class="icon-btn mx-2" :title="t('button.pause')" @click="pause(file, obj)">
-                          <svg w="1em" h="1em">
+                        <!-- 暂停 -->
+                        <a v-if="obj.file.status === 'uploading' || obj.file.status === 'waiting'" class="icon-btn mx-2" :title="t('button.pause')" @click="pause(file, obj)">
+                          <svg w="0.8em" h="0.8em">
                             <use xlink:href="#icon-pause"/>
                           </svg>
                         </a>
-                        <a class="icon-btn mx-2" :title="t('button.start')" @click="start(file, obj)">
-                          <svg w="1em" h="1em">
+                        <!-- 开始 -->
+                        <a v-if="obj.file.status === 'paused'" class="icon-btn mx-2" :title="t('button.start')" @click="start(file, obj)">
+                          <svg w="0.8em" h="0.8em">
                             <use xlink:href="#icon-start"/>
                           </svg>
                         </a>
-                        <a class="icon-btn mx-2" :title="t('button.retry')" @click="retry(file, obj)">
-                          <svg w="1em" h="1em">
+                        <!-- 重试 -->
+                        <a v-if="obj.file.status === 'failed'" class="icon-btn mx-2" :title="t('button.retry')" @click="retry(file, obj)">
+                          <svg w="0.75em" h="0.75em">
                             <use xlink:href="#icon-retry"/>
                           </svg>
                         </a>
-                        <a class="icon-btn mx-2" :title="t('button.cancel')" @click="cancel(file, obj)">
-                          <svg w="1em" h="1em">
+                        <!-- 取消 -->
+                        <a v-if="obj.file.status !== 'success'" class="icon-btn mx-2" :title="t('button.cancel')" @click="cancel(file, obj)">
+                          <svg w="0.8em" h="0.8em">
                             <use xlink:href="#icon-cancel"/>
                           </svg>
                         </a>
-                        <a class="icon-btn mx-2" :title="t('button.remove')" @click="remove(file, obj)">
-                          <svg w="1em" h="1em">
+                        <!-- 删除 -->
+                        <a v-if="obj.file.status === 'success'" class="icon-btn mx-2" :title="t('button.remove')" @click="remove(file, obj)">
+                          <svg w="0.8em" h="0.8em">
                             <use xlink:href="#icon-close2"/>
                           </svg>
                         </a>
-                        <a class="icon-btn mx-2" :title="t('button.download')" @click="download(file, obj)">
-                          <svg w="1em" h="1em">
+                        <!-- 下载 -->
+                        <a v-if="obj.file.status === 'success'" class="icon-btn mx-2" :title="t('button.download')" @click="download(file, obj)">
+                          <svg w="0.8em" h="0.8em">
                             <use xlink:href="#icon-download"/>
                           </svg>
                         </a>
-                        <a class="icon-btn mx-2" :title="t('button.preview')" @click="preview(file, obj)">
-                          <svg w="1em" h="1em">
+                        <!-- 预览 -->
+                        <a v-if="obj.file.status === 'success'" class="icon-btn mx-2" :title="t('button.preview')" @click="preview(file, obj)">
+                          <svg w="0.8em" h="0.8em">
                             <use xlink:href="#icon-preview"/>
                           </svg>
                         </a>
@@ -227,7 +296,7 @@ onMounted(() => {
       </template>
     </uploader-list>
     <div>
-      <uploader-btn id="global-uploader-btn" ref="uploadBtnRef">
+      <uploader-btn id="global-uploader-btn" ref="uploadBtnRef" :attrs="{ accept: typeof props.accept === 'object' ? props.accept.join() : props.accept }">
         <a class="uploader-btn-class" :title="t('button.upload')">
           <svg w="1em" h="1em">
             <use xlink:href="#icon-upload"/>
@@ -270,6 +339,11 @@ onMounted(() => {
   }
 }
 
+.upload-progress {
+  margin-top: 2px;
+  width: 98%;
+}
+
 .uploader-file {
   height: 1.5em;
   line-height: 1.5em;
@@ -285,13 +359,13 @@ onMounted(() => {
 }
 
 .uploader-file-size {
-  width: 6%;
+  width: 10%;
   border-right: 1px solid #cdcdcd;
   text-indent: 10px;
 }
 .uploader-file-meta {
   border-right: 1px solid #cdcdcd;
-  width: 14%;
+  width: 10%;
 }
 .uploader-file-status {
   border-right: 1px solid #cdcdcd;

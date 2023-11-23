@@ -41,6 +41,16 @@ message:
   closeOtherTab: 确认关闭其它所有页签吗？
   closeAllTab: 确认关闭所有页签吗？
   remind: 提示
+upload-status:
+  success: 上传成功
+  error: 上传失败
+  uploading: 上传中
+  paused: 已暂停
+  waiting: 等待上传
+  md5: 校验MD5
+  merging: 合并中
+  transcoding: 转码中
+  failed: 上传失败
 component:
   placeholder_input: 请录入
   placeholder_select: 请选择
