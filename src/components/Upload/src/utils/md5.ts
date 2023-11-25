@@ -29,14 +29,12 @@ export function generateMD5(file, options = {}) {
     }
     else {
       const md5 = spark.end()
-      console.log(`MD5计算完毕：${file.name} \nMD5：${md5} \n分片：${chunks} 大小:${file.size} 用时：${new Date().getTime() - time}ms`)
       // md5计算完毕
       if (options.onSuccess && typeof options.onSuccess == 'function')
         options.onSuccess(md5, `<b>MD5计算完毕</br><strong><font color="blue">${file.name}</font></strong></br>大小：<u>${file.size}</u> Bytes</br>用时：<font color="green">${new Date().getTime() - time}ms</font><b>`)
     }
   }
   fileReader.onerror = function () {
-    console.log('MD5计算失败')
     if (options.onError && typeof options.onError == 'function')
       options.onError()
   }

@@ -73,22 +73,21 @@ const initProps = computed(() => {
     /**
      * @description 服务器分片校验函数，秒传及断点续传基础
      */
-    checkChunkUploadedByResponse: function (chunk, message) {
+    checkChunkUploadedByResponse(chunk, message) {
       console.log(chunk, message)
       const skip = false
-       try {
-        let objMessage = JSON.parse(message)
-        if (objMessage.skipUpload) {
+      try {
+        const objMessage = JSON.parse(message)
+        if (objMessage.skipUpload)
           skip = true
-        } else {
-          skip = (objMessage.uploaded || []).indexOf(chunk.offset + 1) >= 0
-        }
-      } catch (e) {}
+        else
+          skip = (objMessage.uploaded || []).includes(chunk.offset + 1)
+      }
+      catch (e) {}
       return skip
     },
     query: props.query,
     testChunks: true,
-    forceChunkSize: true,
   }
 })
 
@@ -103,9 +102,9 @@ async function onFileAdded(file: any, event: any) {
   // 将额外的参数赋值到每个文件上，以不同文件使用不同params的需求
   file.params = props.query
   // 计算MD5
-  const md5 = await computeMD5(file)
-  console.log(md5)
-  startUpload(file, md5)
+  computeMD5(file).then((md5: string) => {
+    startUpload(file, md5)
+  }).catch(() => {})
 }
 
 function onFileSuccess(rootFile: any, file: any, message: string, chunk: any) {
@@ -119,18 +118,20 @@ function onFileSuccess(rootFile: any, file: any, message: string, chunk: any) {
 }
 
 function onFileProgress(rootFile: any, file: any, chunk: any) {
-  file.status = 'uploading'
+  if (file.status === 'waiting')
+    file.status = 'uploading'
   console.log('onFileProgress', rootFile, file, chunk)
 }
 
 function onFileError(rootFile: any, file: any, message: string, chunk: any) {
+  file.pause()
   file.status = 'failed'
   ElNotification.success({
     message: `文件${file.name}上传失败！`,
     duration: 3000,
     position: 'bottom-right',
   })
-  console.log('onFileAdded', rootFile, file, message, chunk)
+  console.log('onFileError', rootFile, file, message, chunk)
 }
 
 function computeMD5(file: any) {
@@ -173,26 +174,22 @@ function computeMD5(file: any) {
 // md5计算完毕，开始上传
 function startUpload(file: any, md5: string) {
   file.uniqueIdentifier = md5
+  file.status = 'waiting'
   file.resume()
-  if(!file.isUploading()){
-    file.status = 'waiting'
-  }
 }
 
 function pause(file: any, obj: any) {
   file.pause()
   file.status = 'paused'
 }
-const resume = (file: any, obj: any) => {
+function resume(file: any, obj: any) {
+  file.status = 'waiting'
   file.resume()
-  if(!file.isUploading()){
-    file.status = 'waiting'
-  }
 }
-const cancel = (file: any, obj: any) => {
+function cancel(file: any, obj: any) {
   file.cancel()
 }
-const retry = (file: any, obj: any) => {
+function retry(file: any, obj: any) {
   file.retry()
 }
 
@@ -212,7 +209,7 @@ onMounted(() => {
     @file-progress="onFileProgress"
     @file-error="onFileError"
   >
-    <uploader-unsupport></uploader-unsupport>
+    <uploader-unsupport />
     <uploader-list>
       <template #default="{ fileList }">
         <div class="file-panel" :class="{ collapse }">
@@ -221,7 +218,7 @@ onMounted(() => {
             <div class="operate">
               <a class="icon-btn mx-1" :title="t(collapse ? 'button.minimize' : 'button.maximize')" @click="collapse = !collapse">
                 <svg w="1em" h="1em">
-                  <use :xlink:href="`#icon-${collapse ? 'minimize' : 'maximize'}`"/>
+                  <use :xlink:href="`#icon-${collapse ? 'minimize' : 'maximize'}`" />
                 </svg>
               </a>
             </div>
@@ -241,9 +238,11 @@ onMounted(() => {
                 >
                   <template #default="obj">
                     <div class="uploader-file-info">
-                      <span class="uploader-file-name" :title="file.name"><i class="uploader-file-icon" :icon="obj.fileCategory"></i>{{ file.name }}</span>
-                      <div class="uploader-file-size">{{ obj.formatedSize }}</div>
-                      <div class="uploader-file-meta"></div>
+                      <span class="uploader-file-name" :title="file.name"><i class="uploader-file-icon" :icon="obj.fileCategory" />{{ file.name }}</span>
+                      <div class="uploader-file-size">
+                        {{ obj.formatedSize }}
+                      </div>
+                      <div class="uploader-file-meta" />
                       <div class="uploader-file-status">
                         <el-progress
                           v-if="obj.file.status === 'uploading' || obj.file.status === 'md5'"
@@ -263,43 +262,43 @@ onMounted(() => {
                         <!-- 暂停 -->
                         <a v-if="obj.file.status === 'uploading' || obj.file.status === 'waiting'" class="icon-btn ml-2" :title="t('button.pause')" @click="pause(file, obj)">
                           <svg w="0.8em" h="0.8em">
-                            <use xlink:href="#icon-pause"/>
+                            <use xlink:href="#icon-pause" />
                           </svg>
                         </a>
                         <!-- 开始 -->
                         <a v-if="obj.file.status === 'paused'" class="icon-btn ml-2" :title="t('button.start')" @click="resume(file, obj)">
                           <svg w="0.8em" h="0.8em">
-                            <use xlink:href="#icon-start"/>
+                            <use xlink:href="#icon-start" />
                           </svg>
                         </a>
                         <!-- 重试 -->
                         <a v-if="obj.file.status === 'failed'" class="icon-btn ml-2" :title="t('button.retry')" @click="retry(file, obj)">
                           <svg w="0.75em" h="0.75em">
-                            <use xlink:href="#icon-retry"/>
+                            <use xlink:href="#icon-retry" />
                           </svg>
                         </a>
                         <!-- 取消 -->
                         <a v-if="obj.file.status !== 'success'" class="icon-btn ml-2" :title="t('button.cancel')" @click="cancel(file, obj)">
                           <svg w="0.8em" h="0.8em">
-                            <use xlink:href="#icon-cancel"/>
+                            <use xlink:href="#icon-cancel" />
                           </svg>
                         </a>
                         <!-- 删除 -->
                         <a v-if="obj.file.status === 'success'" class="icon-btn ml-2" :title="t('button.remove')" @click="remove(file, obj)">
                           <svg w="0.8em" h="0.8em">
-                            <use xlink:href="#icon-close2"/>
+                            <use xlink:href="#icon-close2" />
                           </svg>
                         </a>
                         <!-- 下载 -->
                         <a v-if="obj.file.status === 'success'" class="icon-btn ml-2" :title="t('button.download')" @click="download(file, obj)">
                           <svg w="0.8em" h="0.8em">
-                            <use xlink:href="#icon-download"/>
+                            <use xlink:href="#icon-download" />
                           </svg>
                         </a>
                         <!-- 预览 -->
                         <a v-if="obj.file.status === 'success'" class="icon-btn ml-2" :title="t('button.preview')" @click="preview(file, obj)">
                           <svg w="0.8em" h="0.8em">
-                            <use xlink:href="#icon-preview"/>
+                            <use xlink:href="#icon-preview" />
                           </svg>
                         </a>
                       </div>
@@ -319,7 +318,7 @@ onMounted(() => {
       <uploader-btn id="global-uploader-btn" ref="uploadBtnRef" :attrs="{ accept: typeof props.accept === 'object' ? props.accept.join() : props.accept }">
         <a class="uploader-btn-class" :title="t('button.upload')">
           <svg w="1em" h="1em">
-            <use xlink:href="#icon-upload"/>
+            <use xlink:href="#icon-upload" />
           </svg>
         </a>
       </uploader-btn>
