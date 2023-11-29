@@ -14,7 +14,7 @@ const props = defineProps({
    */
   target: {
     type: String,
-    default: 'http://localhost:3000/upload',
+    default: 'http://localhost:11001/uploader/chunk',
   },
   /**
    * @description 分片大小2M/片
@@ -74,30 +74,32 @@ const initProps = computed(() => {
      * @description 服务器分片校验函数，秒传及断点续传基础
      */
     checkChunkUploadedByResponse(chunk, message) {
-      console.log(chunk, message)
-      const skip = false
+      console.log(message)
+      let objMessage = {}
       try {
-        const objMessage = JSON.parse(message)
-        if (objMessage.skipUpload)
-          skip = true
-        else
-          skip = (objMessage.uploaded || []).includes(chunk.offset + 1)
+        objMessage = JSON.parse(message)
       }
       catch (e) {}
-      return skip
+      // fake response
+      // objMessage.uploaded_chunks = [2, 3, 4, 5, 6, 8, 10, 11, 12, 13, 17, 20, 21]
+      // check the chunk is uploaded
+      return (objMessage.data || []).includes(chunk.offset + 1)
     },
     query: props.query,
     testChunks: true,
+    headers: {
+      Authorization: sessionStorage.getItem('token'),
+    },
   }
 })
 
 function fileStatusText(obj: any) {
-  console.log(obj)
+  // console.log(obj)
   return t(`upload-status.${obj.file.status}`)
 }
 
 async function onFileAdded(file: any, event: any) {
-  console.log('onFileAdded', file, event)
+  // console.log('onFileAdded', file, event)
   emits('fileAdded', file)
   // 将额外的参数赋值到每个文件上，以不同文件使用不同params的需求
   file.params = props.query
@@ -114,13 +116,13 @@ function onFileSuccess(rootFile: any, file: any, message: string, chunk: any) {
     duration: 3000,
     position: 'bottom-right',
   })
-  console.log('onFileSuccess', rootFile, file, message, chunk)
+  // console.log('onFileSuccess', rootFile, file, message, chunk)
 }
 
 function onFileProgress(rootFile: any, file: any, chunk: any) {
   if (file.status === 'waiting')
     file.status = 'uploading'
-  console.log('onFileProgress', rootFile, file, chunk)
+  // console.log('onFileProgress', rootFile, file, chunk)
 }
 
 function onFileError(rootFile: any, file: any, message: string, chunk: any) {
@@ -131,7 +133,7 @@ function onFileError(rootFile: any, file: any, message: string, chunk: any) {
     duration: 3000,
     position: 'bottom-right',
   })
-  console.log('onFileError', rootFile, file, message, chunk)
+  // console.log('onFileError', rootFile, file, message, chunk)
 }
 
 function computeMD5(file: any) {
@@ -141,7 +143,7 @@ function computeMD5(file: any) {
   file.status = 'md5'
   // 开始计算MD5
   return new Promise((resolve: any, reject: any) => {
-    generateMD5(file, {
+    generateMD5(file, props.chunkSize, {
       onProgress(currentChunk: number, chunks: number) {
         // 实时展示MD5的计算进度
         nextTick(() => {

@@ -1,6 +1,6 @@
 // 二次封装 axios 模块，包含拦截器等信息
 import type { AxiosRequestConfig } from 'axios'
-import qs from 'qs';
+import qs from 'qs'
 import axios from 'axios'
 import bcrypt from 'bcryptjs'
 import i18n from '~/modules/i18n'

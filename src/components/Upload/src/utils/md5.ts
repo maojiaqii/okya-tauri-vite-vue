@@ -5,20 +5,19 @@ import SparkMD5 from 'spark-md5'
  * @param file {File}
  * @param options {Object} - onProgress | onSuccess | onError
  */
-export function generateMD5(file, options = {}) {
+export function generateMD5(file, chunkSize, options = {}) {
   const fileReader = new FileReader()
   const time = new Date().getTime()
   const blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice
-  const chunkSize = 10 * 1024 * 1000
   const chunks = Math.ceil(file.size / chunkSize)
   let currentChunk = 0
-  const spark = new SparkMD5()
+  const spark = new SparkMD5.ArrayBuffer()
+  fileReader.readAsArrayBuffer(blobSlice.call(file.file, 0, chunkSize))
   const loadNext = () => {
     const start = currentChunk * chunkSize
     const end = start + chunkSize >= file.size ? file.size : start + chunkSize
     fileReader.readAsArrayBuffer(blobSlice.call(file.file, start, end))
   }
-  loadNext()
   fileReader.onload = (e) => {
     spark.append(e.target.result)
     if (currentChunk < chunks) {
