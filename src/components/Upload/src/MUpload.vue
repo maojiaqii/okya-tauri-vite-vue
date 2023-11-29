@@ -14,7 +14,7 @@ const props = defineProps({
    */
   target: {
     type: String,
-    default: 'http://localhost:11001/uploader/chunk',
+    default: 'http://localhost:11001/file/uploader',
   },
   /**
    * @description 分片大小2M/片
@@ -41,7 +41,7 @@ const props = defineProps({
    * @description 允许上传的文件类型
    */
   accept: {
-    type: [Array<String>, String],
+    type: [Array<string>, String],
     default: '*.*',
   },
   /**
@@ -56,7 +56,7 @@ const props = defineProps({
     default: {},
   },
 })
-const emits = defineEmits(['fileAdded'])
+const emits = defineEmits(['fileAdded', 'fileSuccess', 'fileError'])
 const { t } = useI18n()
 const uploaderRef = ref()
 const uploadBtnRef = ref()
@@ -74,16 +74,24 @@ const initProps = computed(() => {
      * @description 服务器分片校验函数，秒传及断点续传基础
      */
     checkChunkUploadedByResponse(chunk, message) {
-      console.log(message)
       let objMessage = {}
       try {
         objMessage = JSON.parse(message)
       }
       catch (e) {}
-      // fake response
-      // objMessage.uploaded_chunks = [2, 3, 4, 5, 6, 8, 10, 11, 12, 13, 17, 20, 21]
-      // check the chunk is uploaded
       return (objMessage.data || []).includes(chunk.offset + 1)
+    },
+    /**
+     * @description 处理上传的业务返回
+     */
+    processResponse(response, cb, file, chunk){
+      let objMessage = {}
+      try {
+        objMessage = JSON.parse(response)
+      }
+      catch (e) {}
+      // true时出发fileError事件
+      cb(!(objMessage.code && objMessage.code === 200), response)
     },
     query: props.query,
     testChunks: true,
@@ -93,16 +101,8 @@ const initProps = computed(() => {
   }
 })
 
-function fileStatusText(obj: any) {
-  // console.log(obj)
-  return t(`upload-status.${obj.file.status}`)
-}
-
 async function onFileAdded(file: any, event: any) {
-  // console.log('onFileAdded', file, event)
   emits('fileAdded', file)
-  // 将额外的参数赋值到每个文件上，以不同文件使用不同params的需求
-  file.params = props.query
   // 计算MD5
   computeMD5(file).then((md5: string) => {
     startUpload(file, md5)
@@ -112,28 +112,27 @@ async function onFileAdded(file: any, event: any) {
 function onFileSuccess(rootFile: any, file: any, message: string, chunk: any) {
   file.status = 'success'
   ElNotification.success({
-    message: `文件${file.name}上传成功！`,
+    message: `${file.name}上传成功！`,
     duration: 3000,
     position: 'bottom-right',
   })
-  // console.log('onFileSuccess', rootFile, file, message, chunk)
+  emits('fileSuccess', file, message)
 }
 
 function onFileProgress(rootFile: any, file: any, chunk: any) {
   if (file.status === 'waiting')
     file.status = 'uploading'
-  // console.log('onFileProgress', rootFile, file, chunk)
 }
 
 function onFileError(rootFile: any, file: any, message: string, chunk: any) {
   file.pause()
   file.status = 'failed'
-  ElNotification.success({
-    message: `文件${file.name}上传失败！`,
+  ElNotification.error({
+    message: `${file.name}上传失败！`,
     duration: 3000,
     position: 'bottom-right',
   })
-  // console.log('onFileError', rootFile, file, message, chunk)
+  emits('fileError', file, message)
 }
 
 function computeMD5(file: any) {
@@ -180,18 +179,18 @@ function startUpload(file: any, md5: string) {
   file.resume()
 }
 
-function pause(file: any, obj: any) {
+function pause(file: any) {
   file.pause()
   file.status = 'paused'
 }
-function resume(file: any, obj: any) {
+function resume(file: any) {
   file.status = 'waiting'
   file.resume()
 }
-function cancel(file: any, obj: any) {
+function cancel(file: any) {
   file.cancel()
 }
-function retry(file: any, obj: any) {
+function retry(file: any) {
   file.retry()
 }
 
@@ -250,15 +249,15 @@ onMounted(() => {
                           v-if="obj.file.status === 'uploading' || obj.file.status === 'md5'"
                           class="upload-progress"
                           :stroke-width="24"
-                          :percentage="Number(obj.progress || obj.file.progressNum)"
+                          :percentage="parseInt(obj.progress || obj.file.progressNum || '0')"
                           status="success"
                           striped
                           striped-flow
                         >
                           <span v-if="obj.file.status === 'uploading'">{{ `${obj.formatedAverageSpeed}   ${obj.formatedTimeRemaining}` }}</span>
-                          <span v-else>{{ `${obj.progress || obj.file.progressNum}% ${fileStatusText(obj)}` }}</span>
+                          <span v-else>{{ `${obj.progress || obj.file.progressNum}% ` + t(`upload-status.${obj.file.status}`) }}</span>
                         </el-progress>
-                        <span v-else>{{ fileStatusText(obj) }}</span>
+                        <span v-else>{{ t(`upload-status.${obj.file.status}`) }}</span>
                       </div>
                       <div class="uploader-file-actions">
                         <!-- 暂停 -->
