@@ -51,6 +51,7 @@ upload-status:
   merging: merging
   transcoding: transcoding
   failed: failed
+  merge-failed: merge failed
 component:
   placeholder_input: please input
   placeholder_select: please select

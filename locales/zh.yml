@@ -51,6 +51,7 @@ upload-status:
   merging: 合并中
   transcoding: 转码中
   failed: 上传失败
+  merge-failed: 合并失败
 component:
   placeholder_input: 请录入
   placeholder_select: 请选择

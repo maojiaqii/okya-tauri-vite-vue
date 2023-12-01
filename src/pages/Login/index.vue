@@ -38,9 +38,8 @@ function cantSpace() {
 async function getKaptcha() {
   login.captchaImage().then((res: ResponseObject) => {
     captchaImg.value = res.img
-    if (res.uuid != null) {
+    if (res.uuid != null)
       loginForm.uuid = res.uuid
-    }
   }).catch((e) => {
   })
 }

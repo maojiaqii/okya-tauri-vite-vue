@@ -1,7 +1,13 @@
 <script lang="ts" setup>
 import { generateMD5 } from './utils/md5.js'
+import type { ResponseObject } from '~/types'
+import { file as fileApi } from '~/api'
 
 const props = defineProps({
+  modelValue: {
+    type: [Array<string>, String],
+    default: undefined,
+  },
   /**
    * @description 标题
    */
@@ -14,7 +20,7 @@ const props = defineProps({
    */
   target: {
     type: String,
-    default: 'http://localhost:11001/file/uploader',
+    default: '/api/file/uploader',
   },
   /**
    * @description 分片大小2M/片
@@ -56,7 +62,7 @@ const props = defineProps({
     default: {},
   },
 })
-const emits = defineEmits(['fileAdded', 'fileSuccess', 'fileError'])
+const emits = defineEmits(['fileAdded', 'fileComplete', 'fileError'])
 const { t } = useI18n()
 const uploaderRef = ref()
 const uploadBtnRef = ref()
@@ -97,7 +103,7 @@ const initProps = computed(() => {
     testChunks: true,
     headers: {
       Authorization: sessionStorage.getItem('token'),
-    },
+    }
   }
 })
 
@@ -110,13 +116,22 @@ async function onFileAdded(file: any, event: any) {
 }
 
 function onFileSuccess(rootFile: any, file: any, message: string, chunk: any) {
-  file.status = 'success'
-  ElNotification.success({
-    message: `${file.name}上传成功！`,
-    duration: 3000,
-    position: 'bottom-right',
+  file.status = 'merging'
+  fileApi.merge({ identifier: rootFile.uniqueIdentifier }).then((res: ResponseObject) => {
+    if (res.code === 200) {
+      file.status = 'success'
+      ElNotification.success({
+        message: `${file.name}上传成功！`,
+        duration: 3000,
+        position: 'bottom-right',
+      })
+      emits('fileComplete', rootFile)
+    }
+    else {
+      file.status = 'merge-failed'
+    }
+  }).catch((e) => {
   })
-  emits('fileSuccess', file, message)
 }
 
 function onFileProgress(rootFile: any, file: any, chunk: any) {
@@ -150,14 +165,16 @@ function computeMD5(file: any) {
         })
       },
       onSuccess(md5: string, message: string) {
-        ElNotification.success({
-          message,
-          dangerouslyUseHTMLString: true,
-          duration: 3000,
-          position: 'bottom-right',
-        })
-        file.status = 'paused'
-        resolve(md5)
+        if (file.status !== 'canceled') {
+          ElNotification.success({
+            message,
+            dangerouslyUseHTMLString: true,
+            duration: 3000,
+            position: 'bottom-right',
+          })
+          file.status = 'paused'
+          resolve(md5)
+        }
       },
       onError() {
         ElNotification.success({
@@ -174,9 +191,11 @@ function computeMD5(file: any) {
 }
 // md5计算完毕，开始上传
 function startUpload(file: any, md5: string) {
-  file.uniqueIdentifier = md5
-  file.status = 'waiting'
-  file.resume()
+  if (file.status !== 'canceled') {
+    file.uniqueIdentifier = md5
+    file.status = 'waiting'
+    file.resume()
+  }
 }
 
 function pause(file: any) {
@@ -188,12 +207,20 @@ function resume(file: any) {
   file.resume()
 }
 function cancel(file: any) {
+  file.status = 'canceled'
   file.cancel()
 }
 function retry(file: any) {
   file.retry()
 }
+function remove(file: any) {
+  console.log(file)
+}
 
+watch(() => uploaderRef,
+  (nv, ov) => {
+    console.log(nv)
+  },{deep: true})
 onMounted(() => {
 })
 </script>
@@ -202,7 +229,6 @@ onMounted(() => {
   <!-- 上传 -->
   <uploader
     ref="uploaderRef"
-    class="uploader-app"
     :options="initProps"
     :auto-start="false"
     @file-added="onFileAdded"
@@ -255,7 +281,7 @@ onMounted(() => {
                           striped-flow
                         >
                           <span v-if="obj.file.status === 'uploading'">{{ `${obj.formatedAverageSpeed}   ${obj.formatedTimeRemaining}` }}</span>
-                          <span v-else>{{ `${obj.progress || obj.file.progressNum}% ` + t(`upload-status.${obj.file.status}`) }}</span>
+                          <span v-else>{{ `${obj.progress || obj.file.progressNum}% ${t(`upload-status.${obj.file.status}`)}` }}</span>
                         </el-progress>
                         <span v-else>{{ t(`upload-status.${obj.file.status}`) }}</span>
                       </div>
@@ -332,7 +358,6 @@ onMounted(() => {
   background-color: #fff;
   border: 1px solid #e2e2e2;
   border-radius: 7px 7px 0 0;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 
   .file-title {
     display: flex;

@@ -3,10 +3,12 @@ import * as dict from './dict'
 import * as login from './login'
 import * as perms from './perms'
 import * as data from './data'
+import * as file from './file'
 
 export {
   dict,
   login,
   perms,
   data,
+  file,
 }
