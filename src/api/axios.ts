@@ -21,9 +21,6 @@ const config: AxiosRequestConfig<any> = {
   withCredentials: true,
 }
 
-// 是否静默请求
-config.silence = false
-
 const api = axios.create(config)
 const t = i18n.global.t
 let reqCount = 0

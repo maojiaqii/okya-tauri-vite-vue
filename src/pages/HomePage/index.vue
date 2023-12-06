@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const aboutVisible = ref(false)
-const asadas = ref([])
+const asadas = ref(['33d45745ff0510381de84427a7536f65'])
 const inv = ref(0)
 const datas = [{ id: '1', label: 's1' }, { id: '2', label: 's2' }, { id: '3', label: 's3' }, { id: '4', label: 's4' }, { id: '5', label: 's5' }]
 const czxcasad = `M${Number.parseInt((Math.random() * (1000000 - 1) + 1).toString())}`
@@ -15,10 +15,13 @@ function optionSelected(item: any) {
   console.log('optionSelected', item)
 }
 function change(item: any) {
-  console.log(icon.value)
+  console.log(asadas.value)
 }
 function inputChange(item: any) {
   console.log(new Date(tm.value).valueOf())
+}
+function fileComplete(item: any) {
+  console.log(item)
 }
 </script>
 
@@ -41,7 +44,7 @@ function inputChange(item: any) {
   <MTimeSelect v-model="tm" format="HH:mm:ss" @change="inputChange" />
   <MDivider content="123321" />
   <MRate v-model="inv" allow-half @change="change" size="large" />
-  <MUpload />
+  <MUpload v-model="asadas" @change="change" @fileComplete="fileComplete"/>
   <MDialog fullscreen  v-model="aboutVisible">
     <MExcel :containerId="czxcasad" />
   </MDialog>

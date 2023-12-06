@@ -7,3 +7,12 @@ export function merge(data: object) {
     data,
   })
 }
+
+export function getInfo(data: object) {
+  return axios({
+    url: '/file/getInfo',
+    method: 'get',
+    silence: true,
+    data,
+  })
+}

@@ -52,6 +52,8 @@ upload-status:
   transcoding: transcoding
   failed: failed
   merge-failed: merge failed
+  uploaded: uploaded
+  unKnown: file not exist
 component:
   placeholder_input: please input
   placeholder_select: please select

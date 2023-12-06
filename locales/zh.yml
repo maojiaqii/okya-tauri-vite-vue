@@ -52,6 +52,8 @@ upload-status:
   transcoding: 转码中
   failed: 上传失败
   merge-failed: 合并失败
+  uploaded: 已上传
+  unKnown: 不存在的文件
 component:
   placeholder_input: 请录入
   placeholder_select: 请选择
