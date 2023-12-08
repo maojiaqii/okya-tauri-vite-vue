@@ -73,6 +73,9 @@ api.interceptors.response.use(
     const token = response.headers.authorization || response.data.token
     if (token)
       sessionStorage.setItem('token', token)
+    // 分批下载成功状态
+    if (response.status === 206)
+      return Promise.resolve(response.data)
     const code = response.data.code
     if (code !== 200) {
       ElMessage.error({
@@ -96,7 +99,7 @@ api.interceptors.response.use(
       userStore.$state.loading = false
     }
     // token过期自动路由到登录页面
-    if (err.response.data.message.includes('Token')) {
+    if (err.response.status === 401 || err.response.data.message.includes('Token')) {
       router.push({
         path: '/',
       })

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const aboutVisible = ref(false)
-const asadas = ref(['33d45745ff0510381de84427a7536f65'])
+const asadas = ref(['33d45745ff0510381de84427a7536f65', '168e7cea0369b5791fa8b0bf08f189f1'])
 const inv = ref(0)
 const datas = [{ id: '1', label: 's1' }, { id: '2', label: 's2' }, { id: '3', label: 's3' }, { id: '4', label: 's4' }, { id: '5', label: 's5' }]
 const czxcasad = `M${Number.parseInt((Math.random() * (1000000 - 1) + 1).toString())}`

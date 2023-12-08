@@ -54,6 +54,7 @@ upload-status:
   merge-failed: 合并失败
   uploaded: 已上传
   unKnown: 不存在的文件
+  downloading: 下载中
 component:
   placeholder_input: 请录入
   placeholder_select: 请选择

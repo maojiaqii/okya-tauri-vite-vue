@@ -265,6 +265,53 @@ function remove(file: any) {
   childValue.value.splice(childValue.value.indexOf(file.uniqueIdentifier), 1)
   emits('change', childValue.value)
 }
+function download(file: any) {
+  let num = 0
+  const data = []
+  fileApi.downLoadCount({ fileIdentifier: file.uniqueIdentifier }).then((res) => {
+    const totalCount = res.data
+    if (totalCount > 0) {
+      // eslint-disable-next-line no-unused-expressions
+      file.status = 'downloading'
+      function doDownLoad(count: number) {
+        fileApi.downLoad({ fileIdentifier: file.uniqueIdentifier, no: count }).then((res) => {
+          if (res.size > 0) {
+            data[count] = res
+            doDownLoad(num++)
+            file.progressNum = ((num / totalCount) * 100).toFixed(0)
+          }
+          else {
+            const blob = new Blob(data)
+            // 对于<a>标签，只有 Firefox 和 Chrome（内核） 支持 download 属性
+            // IE10以上支持blob但是依然不支持download
+            if ('download' in document.createElement('a')) {
+              // 支持a标签download的浏览器
+              const link = document.createElement('a') // 创建a标签
+              link.download = file.name // a标签添加属性
+              link.style.display = 'none'
+              link.href = URL.createObjectURL(blob)
+              document.body.appendChild(link)
+              link.click() // 执行下载
+              URL.revokeObjectURL(link.href) // 释放url
+              document.body.removeChild(link) // 释放标签
+            }
+            else {
+              // 其他浏览器
+              navigator.msSaveBlob(blob, file.name)
+            }
+          }
+        }).catch((e) => {
+        })
+      }
+      doDownLoad(num)
+    }
+  }).catch((e) => {})
+}
+
+function preview(file: any) {
+  file.status = '12312312'
+}
+
 function formatSize(size: number) {
   if (size < 1024)
     return `${size.toFixed(0)} B`
@@ -359,7 +406,7 @@ onMounted(() => {
                       </div>
                       <div class="uploader-file-status">
                         <el-progress
-                          v-if="obj.file.status === 'uploading' || obj.file.status === 'md5'"
+                          v-if="obj.file.status === 'uploading' || obj.file.status === 'md5' || obj.file.status === 'downloading'"
                           class="upload-progress"
                           text-inside
                           :stroke-width="24"
@@ -377,43 +424,43 @@ onMounted(() => {
                       <span class="uploader-file-meta" :title="obj.file.uploadTime">{{obj.file.uploadTime}}</span>
                       <div class="uploader-file-actions">
                         <!-- 暂停 -->
-                        <a v-if="obj.file.status === 'uploading' || obj.file.status === 'waiting'" class="icon-btn ml-2" :title="t('button.pause')" @click="pause(file, obj)">
+                        <a v-if="obj.file.status === 'uploading' || obj.file.status === 'waiting'" class="icon-btn ml-2" :title="t('button.pause')" @click="pause(file)">
                           <svg w="0.8em" h="0.8em" color="orange">
                             <use xlink:href="#icon-pause" />
                           </svg>
                         </a>
                         <!-- 开始 -->
-                        <a v-if="obj.file.status === 'paused'" class="icon-btn ml-2" :title="t('button.start')" @click="resume(file, obj)">
+                        <a v-if="obj.file.status === 'paused'" class="icon-btn ml-2" :title="t('button.start')" @click="resume(file)">
                           <svg w="0.8em" h="0.8em" color="green">
                             <use xlink:href="#icon-start" />
                           </svg>
                         </a>
                         <!-- 重试 -->
-                        <a v-if="obj.file.status === 'failed'" class="icon-btn ml-2" :title="t('button.retry')" @click="retry(file, obj)">
+                        <a v-if="obj.file.status === 'failed'" class="icon-btn ml-2" :title="t('button.retry')" @click="retry(file)">
                           <svg w="0.75em" h="0.75em" color="green">
                             <use xlink:href="#icon-retry" />
                           </svg>
                         </a>
                         <!-- 取消 -->
-                        <a v-if="!['success', 'uploaded', 'unKnown'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.cancel')" @click="cancel(file, obj)">
+                        <a v-if="!['success', 'uploaded', 'unKnown'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.cancel')" @click="cancel(file)">
                           <svg w="0.8em" h="0.8em" color="red">
                             <use xlink:href="#icon-cancel" />
                           </svg>
                         </a>
                         <!-- 删除 -->
-                        <a v-if="['success', 'uploaded', 'unKnown'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.remove')" @click="remove(file, obj)">
+                        <a v-if="['success', 'uploaded', 'unKnown'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.remove')" @click="remove(file)">
                           <svg w="0.8em" h="0.8em" color="red">
                             <use xlink:href="#icon-close2" />
                           </svg>
                         </a>
                         <!-- 下载 -->
-                        <a v-if="['success', 'uploaded'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.download')" @click="download(file, obj)">
+                        <a v-if="['success', 'uploaded'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.download')" @click="download(obj.file)">
                           <svg w="0.8em" h="0.8em">
                             <use xlink:href="#icon-download" />
                           </svg>
                         </a>
                         <!-- 预览 -->
-                        <a v-if="['success', 'uploaded'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.preview')" @click="preview(file, obj)">
+                        <a v-if="['success', 'uploaded'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.preview')" @click="preview(file)">
                           <svg w="0.8em" h="0.8em">
                             <use xlink:href="#icon-preview" />
                           </svg>
