@@ -55,6 +55,7 @@ upload-status:
   uploaded: uploaded
   unKnown: file not exist
   downloading: downloading
+  downloaded: downloaded
 component:
   placeholder_input: please input
   placeholder_select: please select

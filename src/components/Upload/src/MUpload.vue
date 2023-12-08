@@ -299,6 +299,7 @@ function download(file: any) {
               // 其他浏览器
               navigator.msSaveBlob(blob, file.name)
             }
+            file.status = 'downloaded'
           }
         }).catch((e) => {
         })
@@ -316,11 +317,11 @@ function formatSize(size: number) {
   if (size < 1024)
     return `${size.toFixed(0)} B`
   else if (size < 1024 * 1024)
-    return `${(size / 1024.0).toFixed(0)} KB`
+    return `${(size / 1024.0).toFixed(1)} KB`
   else if (size < 1024 * 1024 * 1024)
-    return `${(size / 1024.0 / 1024.0).toFixed(0)} MB`
+    return `${(size / 1024.0 / 1024.0).toFixed(1)} MB`
   else
-    return `${(size / 1024.0 / 1024.0 / 1024.0).toFixed(0)} GB`
+    return `${(size / 1024.0 / 1024.0 / 1024.0).toFixed(1)} GB`
 }
 
 function generateFile(obj: any) {
@@ -375,11 +376,11 @@ onMounted(() => {
       <template #default="{ fileList }">
         <div class="file-panel" :class="{ collapse }">
           <div class="file-title">
-            <span class="title">{{ title }}</span>
+            <span class="title">{{ title + `(${fileList.length})` }}</span>
             <div class="operate">
-              <a class="icon-btn mx-1" :title="t(collapse ? 'button.minimize' : 'button.maximize')" @click="collapse = !collapse">
+              <a class="icon-btn mx-1" :title="t(collapse ? 'button.expend' : 'button.collapse')" @click="collapse = !collapse">
                 <svg w="1em" h="1em">
-                  <use :xlink:href="`#icon-${collapse ? 'minimize' : 'maximize'}`" />
+                  <use :xlink:href="`#icon-${collapse ? 'triangle' : 'triangle_1'}`" />
                 </svg>
               </a>
             </div>
@@ -442,25 +443,25 @@ onMounted(() => {
                           </svg>
                         </a>
                         <!-- 取消 -->
-                        <a v-if="!['success', 'uploaded', 'unKnown'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.cancel')" @click="cancel(file)">
+                        <a v-if="!['success', 'uploaded', 'unKnown', 'downloading', 'downloaded'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.cancel')" @click="cancel(file)">
                           <svg w="0.8em" h="0.8em" color="red">
                             <use xlink:href="#icon-cancel" />
                           </svg>
                         </a>
                         <!-- 删除 -->
-                        <a v-if="['success', 'uploaded', 'unKnown'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.remove')" @click="remove(file)">
+                        <a v-if="['success', 'uploaded', 'unKnown', 'downloading', 'downloaded'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.remove')" @click="remove(file)">
                           <svg w="0.8em" h="0.8em" color="red">
                             <use xlink:href="#icon-close2" />
                           </svg>
                         </a>
                         <!-- 下载 -->
-                        <a v-if="['success', 'uploaded'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.download')" @click="download(obj.file)">
+                        <a v-if="['success', 'uploaded', 'downloading', 'downloaded'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.download')" @click="download(obj.file)">
                           <svg w="0.8em" h="0.8em">
                             <use xlink:href="#icon-download" />
                           </svg>
                         </a>
                         <!-- 预览 -->
-                        <a v-if="['success', 'uploaded'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.preview')" @click="preview(file)">
+                        <a v-if="['success', 'uploaded', 'downloading', 'downloaded'].includes(obj.file.status)" class="icon-btn ml-2" :title="t('button.preview')" @click="preview(file)">
                           <svg w="0.8em" h="0.8em">
                             <use xlink:href="#icon-preview" />
                           </svg>
