@@ -162,6 +162,7 @@ async function onFileAdded(file: any, event: any) {
 
 function onFileSuccess(rootFile: any, file: any, message: string, chunk: any) {
   file.status = 'merging'
+  file.progressNum = 100
   fileApi.merge({ identifier: rootFile.uniqueIdentifier }).then((res: ResponseObject) => {
     if (res.code === 200) {
       file.status = 'success'
@@ -376,7 +377,7 @@ onMounted(() => {
       <template #default="{ fileList }">
         <div class="file-panel" :class="{ collapse }">
           <div class="file-title">
-            <span class="title">{{ title + `(${fileList.length})` }}</span>
+            <span class="title">{{ `${title}(${fileList.length})` }}</span>
             <div class="operate">
               <a class="icon-btn mx-1" :title="t(collapse ? 'button.expend' : 'button.collapse')" @click="collapse = !collapse">
                 <svg w="1em" h="1em">
@@ -401,13 +402,16 @@ onMounted(() => {
                   <template #default="obj">
                     {{generateFile(obj)}}
                     <div class="uploader-file-info">
-                      <span class="uploader-file-name" :title="obj.file.name"><i class="uploader-file-icon" :icon="obj.fileCategory" />{{ obj.file.name }}</span>
+                      <span class="uploader-file-icon1"><i class="uploader-file-icon" :icon="obj.fileCategory" /></span>
+                      <span class="uploader-file-name" :title="obj.file.name">
+                        {{ obj.file.name }}
+                      </span>
                       <div class="uploader-file-size">
                         {{ formatSize(obj.file.size) }}
                       </div>
                       <div class="uploader-file-status">
                         <el-progress
-                          v-if="obj.file.status === 'uploading' || obj.file.status === 'md5' || obj.file.status === 'downloading'"
+                          v-if="obj.file.status === 'uploading' || obj.file.status === 'md5' || obj.file.status === 'downloading' || obj.file.status === 'merging'"
                           class="upload-progress"
                           text-inside
                           :stroke-width="24"
@@ -529,17 +533,15 @@ onMounted(() => {
 
 .upload-progress {
   margin-top: 2px;
-  width: 98%;
 }
 
 .uploader-file {
   height: 1.5em;
   line-height: 1.5em;
 }
-
 .uploader-file-name {
   border-right: 1px solid #cdcdcd;
-  width: 40%;
+  width: 38%;
   overflow: hidden;
   float: left;
   display: inline-flex;
@@ -564,9 +566,15 @@ onMounted(() => {
   width: 7%;
   margin-top: 2px;
 }
+.uploader-file-icon1 {
+  float: left;
+  position: relative;
+  height: 100%;
+  width: 2%;
+}
 
 .uploader-file-icon {
-  margin-left: 5px;
+  margin-left: 0;
   margin-right: 0;
   margin-top: 2px;
   &:before {

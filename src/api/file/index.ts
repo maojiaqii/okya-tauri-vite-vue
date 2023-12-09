@@ -4,6 +4,7 @@ export function merge(data: object) {
   return axios({
     url: '/file/merge',
     method: 'get',
+    silence: true,
     data,
   })
 }

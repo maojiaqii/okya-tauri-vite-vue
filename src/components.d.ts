@@ -67,6 +67,7 @@ declare module 'vue' {
     MTimeSelect: typeof import('./components/Select/src/MTimeSelect.vue')['default']
     MTimeSelectHelp: typeof import('./components/Select/md/MTimeSelectHelp.md')['default']
     MUpload: typeof import('./components/Upload/src/MUpload.vue')['default']
+    MUploadHelp: typeof import('./components/Upload/md/MUploadHelp.md')['default']
     NavBar: typeof import('./components/NavBar/src/NavBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
