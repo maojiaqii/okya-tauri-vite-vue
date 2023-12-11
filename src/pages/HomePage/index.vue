@@ -2,7 +2,7 @@
 const aboutVisible = ref(false)
 const asadas = ref([])
 const inv = ref(0)
-const datas = [{ id: '1', label: 's1' }, { id: '2', label: 's2' }, { id: '3', label: 's3' }, { id: '4', label: 's4' }, { id: '5', label: 's5' }]
+const options = [{ value: '1', label: 's1' }, { value: '2', label: 's2' }, { value: '3', label: 's3' }, { value: '4', label: 's4' }, { value: '5', label: 's5' }]
 const czxcasad = `M${Number.parseInt((Math.random() * (1000000 - 1) + 1).toString())}`
 const remote = ref('sys_sex')
 const icon = ref('')
@@ -45,6 +45,9 @@ function fileComplete(item: any) {
   <MDivider content="123321" />
   <MRate v-model="inv" allow-half @change="change" size="large" />
   <MUpload v-model="asadas" @change="change" @fileComplete="fileComplete"/>
+  <MSwitch v-model="inv" inline-prompt active-text="是" inactive-text="否" :active-value="0" :inactive-value="1" @change="fileComplete"/>
+  <MRadio v-model="inv" :options="options" show-blank />
+  <MCheckbox v-model="asadas" :options="options" show-all />
   <MDialog fullscreen  v-model="aboutVisible">
     <MExcel :containerId="czxcasad" />
   </MDialog>

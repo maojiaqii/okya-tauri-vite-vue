@@ -27,10 +27,8 @@ let reqCount = 0
 // request 拦截器
 api.interceptors.request.use(
   (config) => {
-    console.log(config.silence)
     const userStore = useAppStore()
     if (!config.silence) {
-      console.log(config.silence)
       reqCount++
       userStore.$state.loading = true
     }

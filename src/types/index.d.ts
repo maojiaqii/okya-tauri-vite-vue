@@ -25,6 +25,12 @@ declare interface RouteObject {
   }
 }
 
+declare interface ValabelObject {
+  value: string | number | boolean
+  label: string
+  children?: Array<ValabelObject>
+}
+
 declare interface DictObject {
   dictCode: string
   selectedId?: string | number
