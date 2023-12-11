@@ -57,10 +57,16 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  /**
+   * @description 最大上传文件数量
+   */
   maxCounts: {
     type: Number,
     default: Number.POSITIVE_INFINITY,
   },
+  /**
+   * @description 其他参数
+   */
   query: {
     type: Object,
     default: {},
