@@ -50,6 +50,6 @@ function changeEvent(val: string) {
     clearable
     :max="max"
     text-color="#ff9900"
-    @change="changeEvent">
-  </el-rate>
+    @change="changeEvent"
+  />
 </template>

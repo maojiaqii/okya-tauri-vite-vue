@@ -26,10 +26,12 @@ function fileComplete(item: any) {
 </script>
 
 <template>
+  <MText content="3123123123123" :style="{ color: 'red', textAlign: 'center' }" />
+  <MHtml content="<b>3123123123123</b>" :style="{ color: 'red', textAlign: 'center' }" />
   <MButton plain icon='right' @click="click" name="按钮" />
   <MSelect v-model="asadas" :remote="remote" size="small" filterable collapseTags multiple lazy @optionSelected="optionSelected" />
   <MIconSelect v-model="icon" @change="change" size="large" />
-  <MInput v-model="asadas" type="textarea" :autosize="{ minRows: 2, maxRows: 4 }" :minLength=10 :maxLength=100 />
+  <MTextarea v-model="asadas" :autosize="{ minRows: 2, maxRows: 4 }" :minLength=10 :maxLength=100 />
   <MInput v-model="asadas" @change="inputChange">
     <template #prefix>
       <MSvgIcon icon="translate" />
@@ -41,7 +43,9 @@ function fileComplete(item: any) {
   <MInputNumber v-model="inv" placeholder="数字" size="large" @change="inputChange" />
   <MColorSelect v-model="icon" @change="inputChange" />
   <MDateSelect v-model="dt" format="YYYY/MM/DD" disabledDate="after" @change="inputChange" />
+  <MDateRangeSelect v-model="asadas" format="YYYY/MM/DD" disabledDate="after" @change="change" />
   <MTimeSelect v-model="tm" format="HH:mm:ss" @change="inputChange" />
+  <MTimeRangeSelect v-model="asadas" format="HH:mm:ss" @change="change" />
   <MDivider content="123321" />
   <MRate v-model="inv" allow-half @change="change" size="large" />
   <MUpload v-model="asadas" @change="change" @fileComplete="fileComplete"/>

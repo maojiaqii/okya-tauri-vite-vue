@@ -12,14 +12,6 @@ const props = defineProps({
     default: undefined,
   },
   /**
-   * @description 控件类型
-   */
-  type: {
-    type: String,
-    default: 'text',
-    validator: (val: string) => ['text', 'password'].includes(val),
-  },
-  /**
    * @description 控件尺寸
    */
   size: {
@@ -42,18 +34,26 @@ const props = defineProps({
     default: true,
   },
   /**
+   * @description 自动高度
+   */
+  autosize: {
+    type: [Object, Boolean],
+    // eslint-disable-next-line vue/require-valid-default-prop
+    default: { minRows: 2, maxRows: 2 },
+  },
+  /**
    * @description 最小长度
    */
   minLength: {
     type: Number,
-    default: 0,
+    default: undefined,
   },
   /**
    * @description 最大长度
    */
   maxLength: {
     type: Number,
-    default: Number.POSITIVE_INFINITY,
+    default: undefined,
   },
 })
 const emits = defineEmits(['update:modelValue', 'change'])
@@ -73,11 +73,12 @@ function changeEvent(val: string) {
   <el-input
     v-model="childValue"
     :size="size"
+    type="textarea"
     :maxlength="maxLength"
     :minlength="minLength"
-    :type="type"
     :clearable="clearable"
     :disabled="disabled"
+    :autosize="autosize"
     :placeholder="placeholder ? placeholder : t('component.placeholder_input')"
     @change="changeEvent"
   >

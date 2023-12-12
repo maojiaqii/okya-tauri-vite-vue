@@ -97,9 +97,10 @@ function changeEvent(val: string) {
     :min="min"
     :max="max"
     :step="step"
-    :stepStrictly="stepStrictly"
+    :step-strictly="stepStrictly"
     :controls="controls"
     :controls-position="controlsPosition"
     :precision="precision"
-    @change="changeEvent" />
+    @change="changeEvent"
+  />
 </template>

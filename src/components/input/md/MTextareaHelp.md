@@ -1,18 +1,11 @@
 <div class="text-center">
   <div class="text-4xl -mb-6 m-auto" />
-  <h1>MInput</h1>
+  <h1>MTextarea</h1>
 </div>
 
 <h2>示例</h2>
 ```html
-<MInput v-model="asadas">
-  <template #prefix>
-    <MSvgIcon icon="translate" />
-  </template>
-  <template #append>
-    123
-  </template>
-</MInput>
+<MTextarea v-model="asadas" :autosize="{ minRows: 2, maxRows: 4 }" :minLength=10 :maxLength=100 />
 ```
 
 <h2>属性</h2>
@@ -58,6 +51,14 @@
   clearable: {
     type: Boolean,
     default: true,
+  },
+  /**
+   * @description 自动高度
+   */
+  autosize: {
+    type: [Object, Boolean],
+    // eslint-disable-next-line vue/require-valid-default-prop
+    default: { minRows: 2, maxRows: 2 },
   },
   /**
    * @description 最小长度
