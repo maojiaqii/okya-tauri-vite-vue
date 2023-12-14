@@ -52,6 +52,7 @@ function fileComplete(item: any) {
   <MSwitch v-model="inv" inline-prompt active-text="是" inactive-text="否" :active-value="0" :inactive-value="1" @change="fileComplete"/>
   <MRadio v-model="inv" :options="options" show-blank />
   <MCheckbox v-model="asadas" :options="options" show-all />
+  <MRichEditor v-model="dt" />
   <MDialog fullscreen  v-model="aboutVisible">
     <MExcel :containerId="czxcasad" />
   </MDialog>
