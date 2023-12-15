@@ -156,7 +156,7 @@ onUnmounted(() => {
   font-size: 1em;
   line-height: 2em;
   width: 8em;
-  padding: 0.3em;
+  border: 1px solid lightgrey;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.09);
   position: absolute;
   left: v-bind(contextMenuLeft);
@@ -176,8 +176,7 @@ onUnmounted(() => {
   }
 
   li:hover {
-    background-color: rgba(217, 217, 222, 0.99);
-    color: #fff;
+    background-color: rgb(240 240 240 / 99%);
   }
 }
 </style>
