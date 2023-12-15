@@ -57,7 +57,7 @@ const props = defineProps({
   },
 })
 const emits = defineEmits(['update:modelValue', 'change'])
-const { locale, t } = useI18n()
+const { t } = useI18n()
 const childValue = computed({
   get: () => props.modelValue,
   set: (nv) => {

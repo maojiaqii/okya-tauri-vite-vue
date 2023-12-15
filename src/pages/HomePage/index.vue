@@ -7,6 +7,9 @@ const czxcasad = `M${Number.parseInt((Math.random() * (1000000 - 1) + 1).toStrin
 const remote = ref('sys_sex')
 const icon = ref('')
 const dt = ref('')
+const dt123 = ref('closeMenu(e){\n' +
+  '              this.visible = false;\n' +
+  '          }')
 const tm = ref(1700470641000)
 function click() {
   aboutVisible.value = true
@@ -22,10 +25,12 @@ function inputChange(item: any) {
 }
 function fileComplete(item: any) {
   console.log(item)
+  console.log(dt123.value)
 }
 </script>
 
 <template>
+
   <MText content="3123123123123" :style="{ color: 'red', textAlign: 'center' }" />
   <MHtml content="<b>3123123123123</b>" :style="{ color: 'red', textAlign: 'center' }" />
   <MButton plain icon='right' @click="click" name="按钮" />
@@ -52,7 +57,9 @@ function fileComplete(item: any) {
   <MSwitch v-model="inv" inline-prompt active-text="是" inactive-text="否" :active-value="0" :inactive-value="1" @change="fileComplete"/>
   <MRadio v-model="inv" :options="options" show-blank />
   <MCheckbox v-model="asadas" :options="options" show-all />
+  <MRichEditor v-model="dt" />
   <MDialog fullscreen  v-model="aboutVisible">
-    <MExcel :containerId="czxcasad" />
+    <MJsEditor v-model="dt123" @change="fileComplete"/>
+<!--    <MExcel :containerId="czxcasad" />-->
   </MDialog>
 </template>
