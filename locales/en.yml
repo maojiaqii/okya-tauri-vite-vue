@@ -31,6 +31,8 @@ button:
   remove: remove
   download: download
   preview: preview
+  clear: clear
+  format: format
 message:
   loading: Loading, please wait
   errorCode: ErrCode：&nbsp;

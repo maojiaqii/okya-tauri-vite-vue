@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createHead } from '@vueuse/head'
 import { createPinia } from 'pinia'
 import piniaPluginPersist from 'pinia-plugin-persist'
+// @ts-ignore
 import uploader from 'vue-simple-uploader'
 import router from './route'
 import i18n from './modules/i18n'
