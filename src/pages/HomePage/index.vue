@@ -30,7 +30,6 @@ function fileComplete(item: any) {
 </script>
 
 <template>
-
   <MText content="3123123123123" :style="{ color: 'red', textAlign: 'center' }" />
   <MHtml content="<b>3123123123123</b>" :style="{ color: 'red', textAlign: 'center' }" />
   <MButton plain icon='right' @click="click" name="按钮" />
@@ -59,7 +58,7 @@ function fileComplete(item: any) {
   <MCheckbox v-model="asadas" :options="options" show-all />
   <MRichEditor v-model="dt" />
   <MDialog fullscreen  v-model="aboutVisible">
-    <MJsEditor v-model="dt123" @change="fileComplete"/>
+    <MCodeEditor v-model="dt123" mode="text/x-vue" @change="fileComplete"/>
 <!--    <MExcel :containerId="czxcasad" />-->
   </MDialog>
 </template>

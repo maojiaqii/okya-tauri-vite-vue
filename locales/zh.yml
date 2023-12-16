@@ -43,6 +43,7 @@ message:
   closeOtherTab: 确认关闭其它所有页签吗？
   closeAllTab: 确认关闭所有页签吗？
   remind: 提示
+  connot_format: 当前语言暂不支持格式化！
 upload-status:
   success: 上传成功
   error: 上传失败

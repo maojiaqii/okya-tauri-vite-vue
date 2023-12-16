@@ -43,6 +43,7 @@ message:
   closeOtherTab: proxy will permanently close other tabs. Continue?
   closeAllTab: proxy will permanently close all tabs. Continue?
   remind: Remind
+  connot_format: does not support formatting currently!
 upload-status:
   success: success
   error: error

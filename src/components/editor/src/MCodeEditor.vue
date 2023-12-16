@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { clickOutside } from '~/directive'
-import beautify from "js-beautify";
+import Codemirror from "codemirror-editor-vue3";
 import type {CmComponentRef} from "codemirror-editor-vue3"
 import type {Editor, EditorConfiguration} from "codemirror";
-import Codemirror from "codemirror-editor-vue3";
+// 深色主题
 import 'codemirror/theme/darcula.css'
-import "codemirror/addon/selection/active-line"
 // 代码提示
-import "codemirror/addon/hint/show-hint.css";
+import "./css/show-hint.css";
 import "codemirror/addon/hint/show-hint";
 import "codemirror/addon/hint/javascript-hint";
+import "codemirror/addon/hint/sql-hint";
 // 代码折叠
 import "codemirror/addon/fold/foldcode";
 import "codemirror/addon/fold/foldgutter";
@@ -17,8 +17,17 @@ import "codemirror/addon/fold/brace-fold";
 import "codemirror/addon/fold/comment-fold";
 // 匹配括号
 import "codemirror/addon/edit/matchbrackets"
-import "codemirror/mode/javascript/javascript.js";
+// 高亮当前行
+import "codemirror/addon/selection/active-line"
+// 占位内容
 import "codemirror/addon/display/placeholder.js";
+// 语言包
+import "codemirror/mode/javascript/javascript.js";
+import "codemirror/mode/sql/sql.js";
+import 'codemirror/mode/vue/vue.js';
+// 格式化
+import beautify from "js-beautify";
+import * as sqlFormatter from 'sql-formatter';
 
 const vClickOutside = clickOutside
 
@@ -33,6 +42,13 @@ const props = defineProps({
   placeholder: {
     type: String,
     default: '',
+  },
+  /**
+   * @description 模式 text/javascript text/x-mysql text/x-vue
+   */
+  mode: {
+    type: String,
+    default: 'text/javascript',
   },
   /**
    * @description 是否禁用
@@ -55,7 +71,7 @@ const contentValue = computed(() => props.modelValue)
 const {t} = useI18n()
 const cmRef = ref<CmComponentRef>()
 const cmOptions: EditorConfiguration = {
-  mode: "text/javascript",
+  mode: props.mode,
   theme: isDark.value ? 'darcula' : 'default',
   spellcheck: true,
   tabSize: 2,
@@ -74,7 +90,6 @@ const cmOptions: EditorConfiguration = {
   gutters: [
     'CodeMirror-linenumbers',
     'CodeMirror-foldgutter',
-    'CodeMirror-lint-markers',
   ],
   styleActiveLine: true,
   matchBrackets: true,
@@ -118,7 +133,13 @@ function onClickOutside() {
 }
 
 const format = () => {
-  cmRef.value?.cminstance.setValue(beautify.js(contentValue.value))
+  if (props.mode === 'text/javascript') {
+    cmRef.value?.cminstance.setValue(beautify.js(contentValue.value))
+  } else if (props.mode === 'text/x-mysql') {
+    cmRef.value?.cminstance.setValue(sqlFormatter.format(contentValue.value))
+  } else {
+    ElMessage.warning(t('message.connot_format'))
+  }
 }
 
 const clear = () => {
@@ -178,5 +199,9 @@ onUnmounted(() => {
   li:hover {
     background-color: rgb(240 240 240 / 99%);
   }
+}
+
+::v-deep(.CodeMirror-hints) {
+  z-index: 9999!important;
 }
 </style>
