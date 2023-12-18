@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { ElMessageBox } from 'element-plus'
 import { clickOutside } from '~/directive'
 import { useAppStore } from '~/stores/app'
 import router from '~/route'

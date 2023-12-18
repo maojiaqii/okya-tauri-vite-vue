@@ -25,6 +25,11 @@ declare interface RouteObject {
   }
 }
 
+declare interface TableDataObject {
+  data: Array,
+  pageNum: number,
+  count: number,
+}
 declare interface ValabelObject {
   value: string | number | boolean
   label: string

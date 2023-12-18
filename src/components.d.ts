@@ -88,6 +88,7 @@ declare module 'vue' {
     MSvgIconHelp: typeof import('./components/svgIcon/md/MSvgIconHelp.md')['default']
     MSwitch: typeof import('./components/switch/src/MSwitch.vue')['default']
     MSwitchHelp: typeof import('./components/switch/md/MSwitchHelp.md')['default']
+    MTable: typeof import('./components/table/src/MTable.vue')['default']
     MText: typeof import('./components/text/src/MText.vue')['default']
     MTextarea: typeof import('./components/input/src/MTextarea.vue')['default']
     MTextareaHelp: typeof import('./components/input/md/MTextareaHelp.md')['default']
