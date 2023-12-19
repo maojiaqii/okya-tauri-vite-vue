@@ -68,8 +68,9 @@ component:
   placeholder_input_or_select: please input or select
   placeholder_select_date: please select date
   placeholder_select_time: please select time
-  sum_text: sum
-  operation_text: operation
+  sum_text: Sum
+  operation_text: Operation
+  index_text: Index
 not-found: Not found
 setting: Settings
 logout: Logout

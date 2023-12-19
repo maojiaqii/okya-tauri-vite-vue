@@ -1,3 +1,5 @@
+// @ts-nocheck
+import type { VNode } from 'vue'
 import type { AxiosResponse } from 'axios'
 
 declare interface ResponseObject extends AxiosResponse {
@@ -30,6 +32,26 @@ declare interface TableDataObject {
   pageNum: number,
   count: number,
 }
+
+declare interface TableColumnObject {
+  prop: string,
+  label: string,
+  comment?: string,
+  visible?: boolean,
+  width?: number | string,
+  minWidth?: number | string,
+  sortable?: boolean,
+  fixed?: boolean | string,
+  align?: string,
+  component?: object,
+  formatter?: (
+    row: T,
+    column: TableColumnCtx<T>,
+    cellValue,
+    index: number
+  ) => VNode | string
+}
+
 declare interface ValabelObject {
   value: string | number | boolean
   label: string

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import {ElTable} from "element-plus";
-import {PropType} from "vue";
-import type {ResponseObject, TableDataObject} from "~/types";
+import type { ResponseObject, TableDataObject } from "~/types";
 
 const {t} = useI18n()
 
@@ -28,7 +27,10 @@ const props = defineProps({
   /**
    * @description 显示边框
    */
-  border: Boolean,
+  border: {
+    type: Boolean,
+    default: true
+  },
   /**
    * @description 是否默认展开所有行，当 Table 包含展开行存在或者为树形表格时有效
    */
@@ -62,24 +64,36 @@ const props = defineProps({
    */
   sumText: {
     type: String,
-    default: t('component.sum_text')
+    default: ''
   },
   /**
    * @description 显示复选框
    */
-  showCheckBox: Boolean,
+  showCheckBox: {
+    type: Boolean,
+    default: true
+  },
   /**
    * @description 是否分页
    */
-  pagination: Boolean,
+  pagination: {
+    type: Boolean,
+    default: true
+  },
   /**
    * @description 显示行号
    */
-  showRowNum: Boolean,
+  showRowNum: {
+    type: Boolean,
+    default: true
+  },
   /**
    * @description 是否显示操作列
    */
-  showOperation: Boolean,
+  showOperation: {
+    type: Boolean,
+    default: true
+  },
   /**
    * @description 每页显示条数集合
    */
@@ -92,14 +106,14 @@ const props = defineProps({
    */
   editTip: {
     type: String,
-    default: t('button.edit')
+    default: ''
   },
   /**
    * @description 删除按钮提示
    */
   deleteTip: {
     type: String,
-    default: t('button.delete')
+    default: ''
   },
   /**
    * @description 编辑按钮图标
@@ -123,6 +137,20 @@ const props = defineProps({
    * @description 删除权限标识
    */
   permsDelete: String,
+  /**
+   * @description 是否可编辑表格
+   */
+  editable: {
+    type: Boolean,
+    default: false
+  },
+  /**
+   * @description 可编辑表格全部可编辑
+   */
+  allEditable: {
+    type: Boolean,
+    default: false
+  },
 })
 const emits = defineEmits(['edit', 'delete'])
 
@@ -137,12 +165,21 @@ const showOperationProp = ref(props.showOperation)
 const pageNum = ref<number>(1)
 const pageSize = ref(props.pageSizes[0])
 const start = ref<number>(0)
+const selectRowIndex = ref(-1)
+const selectCellIndex = ref(-1)
 
 const visibleData = computed(() => {
   if (props.data) {
     return props.data.data
   }
   return []
+})
+
+const total = computed(() => {
+  if (props.data) {
+    return props.data.count
+  }
+  return 0
 })
 
 const emptyImage = new URL('../images/empty.svg', import.meta.url).href;
@@ -152,7 +189,7 @@ const getSummaries = (param: any) => {
   const sums: any = [];
   columns.forEach((column: any, index: number) => {
     if (index === 0) {
-      sums[index] = props.sumText;
+      sums[index] = props.sumText ? props.sumText : t('component.sum_text');
       return;
     }
     if (column.sum) {
@@ -177,12 +214,12 @@ const handleEdit = (index: number, row: any) => {
 };
 
 const deleteRows = (rows: Array<any>) => {
-  ElMessageBox.confirm(t(`${props.deleteTip}${t('message.deleteTableRows')}`), t('message.remind'), {
+  ElMessageBox.confirm(t(`${props.deleteTip ? props.deleteTip : t('button.delete')} ${t('message.deleteTableRows')}`), t('message.remind'), {
     type: 'warning',
   }).then(() => {
     let callback = (res: ResponseObject) => {
       if (res.code === 200) {
-        ElMessage.success(res.message)
+        ElMessage.success(res.msg)
         // findPage()
       }
     };
@@ -194,6 +231,20 @@ const deleteRows = (rows: Array<any>) => {
 const handleDelete = (index: number, row: any) => {
   deleteRows([row])
 };
+
+// 页数刷新
+const refreshPageNo = (pageNumN: number) => {
+  pageNum.value = pageNumN;
+  // findPage();
+  mTable.value?.$refs.scrollBarRef?.setScrollTop(0)
+};
+// 行数刷新
+const refreshPageSize = (pageSizeN: number) => {
+  pageSize.value = pageSizeN;
+  pageNum.value = 1;
+  // findPage();
+  mTable.value?.$refs.scrollBarRef?.setScrollTop(0)
+};
 </script>
 
 <template>
@@ -202,43 +253,44 @@ const handleDelete = (index: number, row: any) => {
             :border="borderProp"
             :data="visibleData"
             :default-expand-all="expandAll"
-            :row-style="{height: rowHeight + 'px'}"
             :show-summary="showSumProp"
             :summary-method="getSummaries"
             :max-height="maxHeight"
             :size="size"
-            width="100%"
+            style="width: 99%"
             stripe
             highlight-current-row
             :tree-props="{children: 'children'}"
             @header-contextmenu="(column, event) => event.preventDefault()"
   >
     <template #empty>
-      <el-image style="width: 100px; height: 100px" :src="emptyImage" fit="cover"/>
+      <el-empty />
     </template>
-    <el-table-column align="center" type="selection" width="50" v-if="showCheckBoxProp"/>
-    <el-table-column align="center" label="序号" width="50" v-if="showRowNumProp">
+    <el-table-column align="center" type="selection" width="40" v-if="showCheckBoxProp"/>
+    <el-table-column align="center" :label="t('component.index_text')" width="65" v-if="showRowNumProp">
       <template #default="scope">
         <span>{{ (pageNum - 1) * pageSize + scope.$index + 1 + start }}</span>
       </template>
     </el-table-column>
-    <cus-table-col v-for="(column, key) in columnsProps"
-                   :allData="data"
-                   :column="column"
-                   :key="key"
-                   :tableData="visibleData"
+    <m-table-column v-for="(column, key) in columnsProps"
+                    :allData="visibleData"
+                    :column="column"
+                    :key="key"
+                    :selectRowIndex="selectRowIndex"
+                    :selectCellIndex="selectCellIndex"
+                    :allEditable="allEditable"
     >
       <template v-slot:[column.prop]="slotProps">
         <slot :name="column.prop" v-bind:colData="slotProps.colData"/>
       </template>
-    </cus-table-col>
-    <el-table-column :label="t('component.operation_text')" align="center" fixed="right" v-if="showOperationProp">
+    </m-table-column>
+    <el-table-column :label="t('component.operation_text')" align="center" width="180" fixed="right" v-if="showOperationProp">
       <template #default="scope">
         <div style="align-items: center;display: flex;justify-content: center;">
-          <MButton :name="editTip" :icon="editIcon" :perms="permsEdit" :size="size"
+          <MButton :name="props.editTip ? props.editTip : t('button.edit')" :icon="editIcon" :perms="permsEdit" :size="size"
                    @click="handleEdit(scope.$index, scope.row)" circle
           />
-          <MButton :name="deleteTip" :icon="deleteIcon" :perms="permsDelete" :size="size" type="danger"
+          <MButton :name="props.deleteTip ? props.deleteTip : t('button.delete')" :icon="deleteIcon" :perms="permsDelete" :size="size" type="danger"
                    @click="handleDelete(scope.$index, scope.row)" circle
           />
           <slot name="customizeOperation" v-bind:rowData="scope"/>
@@ -246,14 +298,17 @@ const handleDelete = (index: number, row: any) => {
       </template>
     </el-table-column>
   </el-table>
-  <el-pagination v-if="paginationProp" layout="sizes, prev, pager, next, jumper, ->, total, slot"
-                 @current-change="refreshPageNo" :small="size === 'small'"
-                 @size-change="refreshPageSize" :page-sizes="pageSizes"
-                 :current-page="pageNum" :page-size="pageSize" :total="totalCount"
-                 style="float:right;">
-  </el-pagination>
+  <el-pagination v-if="paginationProp"
+                 float-right
+                 mr-4
+                 mt-2
+                 layout="sizes, prev, pager, next, jumper, ->, total"
+                 :small="size === 'small'"
+                 :page-sizes="pageSizes"
+                 :current-page="pageNum"
+                 :page-size="pageSize"
+                 :total="total"
+                 @current-change="refreshPageNo"
+                 @size-change="refreshPageSize"
+  />
 </template>
-
-<style lang="scss" scoped>
-
-</style>

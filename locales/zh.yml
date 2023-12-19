@@ -70,6 +70,7 @@ component:
   placeholder_select_time: 请选择时间
   sum_text: 合计
   operation_text: 操作
+  index_text: 序号
 not-found: 未找到页面
 setting: 设置
 logout: 退出登录

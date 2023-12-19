@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {TableDataObject} from "~/types";
+
 const aboutVisible = ref(false)
 const asadas = ref([])
 const inv = ref(0)
@@ -11,6 +13,78 @@ const dt123 = ref('closeMenu(e){\n' +
   '              this.visible = false;\n' +
   '          }')
 const tm = ref(1700470641000)
+
+const tableColumns = [
+  {
+    prop: "label",
+    label: "列名",
+    visible: true
+  },
+  {
+    prop: "visible",
+    label: "显示",
+    width: 60,
+    visible: true
+  },
+  {
+    prop: "sortable",
+    label: "排序",
+    width: 60,
+    visible: true
+  },
+  {
+    prop: "filter",
+    label: "筛选",
+    width: 60,
+    visible: true
+  },
+  {
+    prop: "align",
+    label: "对齐",
+    width: 100,
+    visible: true
+  },
+  {
+    prop: "fixed",
+    label: "固定",
+    width: 60,
+    visible: true
+  }
+]
+const tableData: TableDataObject = {
+  count: 20,
+  data: [{label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'}],
+  pageNum: 1
+}
 function click() {
   aboutVisible.value = true
 }
@@ -30,6 +104,7 @@ function fileComplete(item: any) {
 </script>
 
 <template>
+  <m-table :data="tableData" :columns="tableColumns"></m-table>
   <MText content="3123123123123" :style="{ color: 'red', textAlign: 'center' }" />
   <MHtml content="<b>3123123123123</b>" :style="{ color: 'red', textAlign: 'center' }" />
   <MButton plain icon='right' @click="click" name="按钮" />

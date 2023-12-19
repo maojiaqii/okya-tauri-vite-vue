@@ -19,8 +19,8 @@ interface loginType {
 
 const loginForm: loginType = reactive({
   uuid: '',
-  userCode: '',
-  password: '',
+  userCode: 'admin',
+  password: '0kya.top!',
   captchaCode: '',
 })
 
