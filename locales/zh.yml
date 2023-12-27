@@ -19,6 +19,8 @@ button:
   close: 关闭
   collapse: 折叠
   expend: 展开
+  collapse_toolbar: 隐藏工具栏
+  expend_toolbar: 展开工具栏
   close_left: 关闭左侧
   close_right: 关闭右侧
   close_others: 关闭其他
@@ -35,6 +37,9 @@ button:
   format: 格式化
   delete: 删除
   edit: 修改
+  clear_sorts: 清空排序
+  clear_filters: 清空筛选
+  settings: 设置
 message:
   loading: 正在加载,请耐心等待
   errorCode: 错误码：&nbsp;&nbsp;&nbsp;&nbsp;
@@ -71,6 +76,7 @@ component:
   sum_text: 合计
   operation_text: 操作
   index_text: 序号
+  files: 附件
 not-found: 未找到页面
 setting: 设置
 logout: 退出登录

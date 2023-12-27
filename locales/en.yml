@@ -19,6 +19,8 @@ button:
   close: Close
   collapse: Collapse
   expend: Expend
+  collapse_toolbar: Collapse toolbar
+  expend_toolbar: Expend toolbar
   close_left: close left tabs
   close_right: close right tabs
   close_others: close other tabs
@@ -35,6 +37,9 @@ button:
   format: format
   delete: delete
   edit: edit
+  clear_sorts: clear sorts
+  clear_filters: clear filters
+  settings: settings
 message:
   loading: Loading, please wait
   errorCode: ErrCode：&nbsp;
@@ -71,6 +76,7 @@ component:
   sum_text: Sum
   operation_text: Operation
   index_text: Index
+  files: Files
 not-found: Not found
 setting: Settings
 logout: Logout

@@ -13,7 +13,7 @@ const props = defineProps({
    */
   title: {
     type: String,
-    default: '附件',
+    default: '',
   },
   /**
    * @description 远程上传接口地址
@@ -383,12 +383,10 @@ onMounted(() => {
       <template #default="{ fileList }">
         <div class="file-panel" :class="{ collapse }">
           <div class="file-title">
-            <span class="title">{{ `${title}(${fileList.length})` }}</span>
+            <span class="title">{{ `${title ? title : t('component.files')}(${fileList.length})` }}</span>
             <div class="operate">
               <a class="icon-btn mx-1" :title="t(collapse ? 'button.expend' : 'button.collapse')" @click="collapse = !collapse">
-                <svg w="1em" h="1em">
-                  <use :xlink:href="`#icon-${collapse ? 'triangle' : 'triangle_1'}`" />
-                </svg>
+                <MSvgIcon size="1em" :icon="collapse ? 'triangle_1' : 'triangle'"/>
               </a>
             </div>
           </div>
@@ -482,7 +480,7 @@ onMounted(() => {
                 </uploader-file>
               </li>
               <li v-if="!fileList.length">
-                暂无待上传文件
+                <el-empty :image-size="70" />
               </li>
             </el-scrollbar>
           </ul>

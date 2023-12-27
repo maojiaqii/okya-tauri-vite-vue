@@ -1,19 +1,20 @@
 <script lang="ts" setup>
-import {ElTable} from "element-plus";
-import type { ResponseObject, TableDataObject } from "~/types";
+import type { TableColumnCtx, TableInstance } from 'element-plus'
+import MTableToolBar from "~/components/table/src/utils/MTableToolBar.vue";
+import type { ResponseObject, TableDataObject, TableColumnObject } from "~/types";
 
-const {t} = useI18n()
+interface Header {row: any, column: TableColumnCtx<any>, rowIndex: number, columnIndex: number}
 
 const props = defineProps({
   data: {
     type: Object as PropType<TableDataObject>,
-    default: undefined,
+    default: { data: [], pageNum: 1, count: 0 },
   },
   /**
    * @description 列信息
    */
   columns: {
-    type: Array,
+    type: Array<TableColumnObject>,
     default: [],
   },
   /**
@@ -152,9 +153,10 @@ const props = defineProps({
     default: false
   },
 })
-const emits = defineEmits(['edit', 'delete'])
+const emits = defineEmits(['search', 'edit', 'delete', 'sortChange'])
+const {t} = useI18n()
 
-const mTable = ref<InstanceType<typeof ElTable>>()
+const mTable = ref<TableInstance>()
 const borderProp = ref(props.border)
 const columnsProps = ref(props.columns)
 const showSumProp = ref(props.showSum)
@@ -167,6 +169,7 @@ const pageSize = ref(props.pageSizes[0])
 const start = ref<number>(0)
 const selectRowIndex = ref(-1)
 const selectCellIndex = ref(-1)
+const sorts = ref<any>({})
 
 const visibleData = computed(() => {
   if (props.data) {
@@ -193,7 +196,7 @@ const getSummaries = (param: any) => {
       return;
     }
     if (column.sum) {
-      const values = data.map((item: any) => Number(item[column.property]));
+      const values = props.data.data.map((item: any) => Number(item[column.property]));
       if (!values.every((value: number) => isNaN(value))) {
         sums[index] = values.reduce((prev: number, curr: number) => {
           const value = Number(curr);
@@ -245,10 +248,43 @@ const refreshPageSize = (pageSizeN: number) => {
   // findPage();
   mTable.value?.$refs.scrollBarRef?.setScrollTop(0)
 };
+
+const sortChange = (column: TableColumnCtx<any>) => {
+  if(column.order){
+    sorts.value[column.prop] = column.order
+  } else {
+    delete sorts.value[column.prop]
+  }
+  emits('sortChange', sorts.value)
+};
+
+const headerCellClass = ({row, column, rowIndex, columnIndex}: Header) => {
+  for (const sort in sorts.value) {
+    column.property === sort && (column.order = sorts.value[sort])
+  }
+}
+
+const clearSort = () => {
+  for (let key in sorts.value) {
+    if (sorts.value.hasOwnProperty(key)) {
+      delete sorts.value[key];
+    }
+  }
+  mTable.value!.$el.querySelectorAll(".is-sortable").forEach((item: HTMLElement) => {
+    // 移除table表头中的排序样式descending和ascending
+    item.classList.remove("descending");
+    item.classList.remove("ascending");
+  });
+  emits('sortChange', sorts.value)
+}
+
+const clearFilter = () => {
+  mTable.value!.clearFilter()
+}
 </script>
 
 <template>
-  <div>表格上方操作按钮组</div>
+  <MTableToolBar @clear-filter="clearFilter" @clear-sort="clearSort" />
   <el-table ref="mTable"
             :border="borderProp"
             :data="visibleData"
@@ -261,6 +297,8 @@ const refreshPageSize = (pageSizeN: number) => {
             stripe
             highlight-current-row
             :tree-props="{children: 'children'}"
+            :header-cell-class-name="headerCellClass"
+            @sort-change="sortChange"
             @header-contextmenu="(column, event) => event.preventDefault()"
   >
     <template #empty>
@@ -273,7 +311,7 @@ const refreshPageSize = (pageSizeN: number) => {
       </template>
     </el-table-column>
     <m-table-column v-for="(column, key) in columnsProps"
-                    :allData="visibleData"
+                    :data="props.data.data"
                     :column="column"
                     :key="key"
                     :selectRowIndex="selectRowIndex"

@@ -18,13 +18,17 @@ const tableColumns = [
   {
     prop: "label",
     label: "列名",
-    visible: true
+    visible: true,
+    sortable: true,
+    filterable: true
   },
   {
     prop: "visible",
     label: "显示",
     width: 60,
-    visible: true
+    visible: true,
+    sortable: true,
+    filterable: true
   },
   {
     prop: "sortable",
@@ -54,32 +58,31 @@ const tableColumns = [
 const tableData: TableDataObject = {
   count: 20,
   data: [{label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示3', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示4', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2s', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示e', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
     {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示d', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
     {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示g', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名2', visible: '显示g', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名2', visible: '显示g', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名2', visible: '显示21', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名2', visible: '显示2qw', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名2', visible: '显示2r', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名3', visible: '显示gr', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名4', visible: '显示2t', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名5', visible: '显示2t', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名q', visible: '显示25', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名4', visible: '显示2h', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名r', visible: '显示2n', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名g', visible: '显示2x', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名d', visible: '显示2f', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名6', visible: '显示2ww', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名9', visible: '显示2hhh', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名4', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
+    {label: '列名1', visible: '显示2d', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
     {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
     {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
     {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'}],
@@ -101,13 +104,22 @@ function fileComplete(item: any) {
   console.log(item)
   console.log(dt123.value)
 }
+
+function sortChange(item: any) {
+  console.log(item)
+}
 </script>
 
 <template>
-  <m-table :data="tableData" :columns="tableColumns"></m-table>
+  <MButton plain icon='right' @click="click" name="按钮" />
+  <MButton plain icon='right' @click="click" name="按钮" />
+  <MButton plain icon='right' @click="click" name="按钮" />
+  <MButton plain icon='right' @click="click" name="按钮" />
+  <MButton plain icon='right' @click="click" name="按钮" />
+  <MButton plain icon='right' @click="click" name="按钮" />
+  <m-table :data="tableData" :columns="tableColumns" @sort-change="sortChange"></m-table>
   <MText content="3123123123123" :style="{ color: 'red', textAlign: 'center' }" />
   <MHtml content="<b>3123123123123</b>" :style="{ color: 'red', textAlign: 'center' }" />
-  <MButton plain icon='right' @click="click" name="按钮" />
   <MSelect v-model="asadas" :remote="remote" size="small" filterable collapseTags multiple lazy @optionSelected="optionSelected" />
   <MIconSelect v-model="icon" @change="change" size="large" />
   <MTextarea v-model="asadas" :autosize="{ minRows: 2, maxRows: 4 }" :minLength=10 :maxLength=100 />

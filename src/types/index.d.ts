@@ -32,7 +32,6 @@ declare interface TableDataObject {
   pageNum: number,
   count: number,
 }
-
 declare interface TableColumnObject {
   prop: string,
   label: string,
@@ -41,15 +40,18 @@ declare interface TableColumnObject {
   width?: number | string,
   minWidth?: number | string,
   sortable?: boolean,
+  filterable?: boolean,
   fixed?: boolean | string,
   align?: string,
   component?: object,
+  sum?: boolean,
   formatter?: (
     row: T,
     column: TableColumnCtx<T>,
     cellValue,
     index: number
-  ) => VNode | string
+  ) => VNode | string,
+  children?: Array<TableColumnObject>
 }
 
 declare interface ValabelObject {
