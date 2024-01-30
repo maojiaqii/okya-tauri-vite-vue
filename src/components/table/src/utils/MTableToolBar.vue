@@ -1,11 +1,25 @@
 <script setup lang="ts">
 import {useAppStore} from '~/stores/app'
+import type {TableProperties} from "~/types";
 
-const emits = defineEmits(['clearFilter', 'clearSort'])
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<TableProperties>,
+    default: {
+      border: true,
+      showSum: false,
+      showCheckBox: true,
+      showRowNum: true,
+      pagination: true,
+      showOperation: true
+    }
+  }
+})
+const emits = defineEmits(['update:modelValue', 'clearSort', 'clearFilter'])
 
 const {t} = useI18n()
 const app = useAppStore()
-const visible =ref(false)
+const visible = ref(false)
 
 const clearSort = () => {
   emits('clearSort')
@@ -14,6 +28,13 @@ const clearSort = () => {
 const clearFilter = () => {
   emits('clearFilter')
 }
+
+const childValue = computed({
+  get: () => props.modelValue,
+  set: (nv) => {
+    emits('update:modelValue', nv)
+  },
+})
 
 onMounted(async () => {
 })
@@ -40,30 +61,32 @@ onMounted(async () => {
           </template>
           <el-tabs model-value="first">
             <el-tab-pane label="表格配置" name="first">
-              <el-checkbox v-model="borderProp" label="边框" size="large"/>
-              <el-checkbox v-model="showRowNumProp" label="行号" size="large"/>
+              <el-checkbox v-model="childValue.border" label="边框" size="large"/>
+              <el-checkbox v-model="childValue.showRowNum" label="行号" size="large"/>
               <br>
-              <el-checkbox v-model="showCheckBoxProp" label="复选框" size="large"/>
-              <el-checkbox v-model="showSumProp" label="合计" size="large"/>
+              <el-checkbox v-model="childValue.showCheckBox" label="复选框" size="large"/>
+              <el-checkbox v-model="childValue.showSum" label="合计" size="large"/>
               <br>
-              <el-checkbox v-model="showOperationProp" label="操作列" size="large"/>
-              <el-checkbox v-model="showPaginationProp" label="分页" size="large"/>
+              <el-checkbox v-model="childValue.showOperation" label="操作列" size="large"/>
+              <el-checkbox v-model="childValue.pagination" label="分页" size="large"/>
             </el-tab-pane>
             <el-tab-pane label="字段配置" name="second">
-              <el-checkbox v-model="borderProp" label="边框" size="large"/>
-              <el-checkbox v-model="showRowNumProp" label="行号" size="large"/>
+              <el-checkbox v-model="childValue.border" label="边框" size="large"/>
+              <el-checkbox v-model="childValue.showRowNum" label="行号" size="large"/>
               <br>
-              <el-checkbox v-model="showCheckBoxProp" label="复选框" size="large"/>
-              <el-checkbox v-model="showSumProp" label="合计" size="large"/>
+              <el-checkbox v-model="childValue.showCheckBox" label="复选框" size="large"/>
+              <el-checkbox v-model="childValue.showSum" label="合计" size="large"/>
               <br>
-              <el-checkbox v-model="showOperationProp" label="操作列" size="large"/>
-              <el-checkbox v-model="showPaginationProp" label="分页" size="large"/>
+              <el-checkbox v-model="childValue.showOperation" label="操作列" size="large"/>
+              <el-checkbox v-model="childValue.pagination" label="分页" size="large"/>
             </el-tab-pane>
           </el-tabs>
         </el-popover>
       </div>
     </Transition>
-    <a class="icon-btn mx-2 !outline-none" :title="t(visible ? 'button.collapse_toolbar' : 'button.expend_toolbar')" @click="visible = !visible">
+    <a class="icon-btn mx-2 !outline-none" :title="t(visible ? 'button.collapse_toolbar' : 'button.expend_toolbar')"
+       @click="visible = !visible"
+    >
       <MSvgIcon :icon="visible ? 'right-right' : 'left-left'"/>
     </a>
   </div>

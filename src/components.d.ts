@@ -51,6 +51,7 @@ declare module 'vue' {
     ElTag: typeof import('element-plus/es')['ElTag']
     ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
+    ElTreeV2: typeof import('element-plus/es')['ElTreeV2']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     FooterBar: typeof import('./components/footerBar/src/FooterBar.vue')['default']
     MainView: typeof import('./components/mainView/src/MainView.vue')['default']

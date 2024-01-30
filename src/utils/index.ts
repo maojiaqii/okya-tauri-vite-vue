@@ -1,8 +1,8 @@
 import SparkMD5 from 'spark-md5'
 import screenfull from 'screenfull'
-import type { Menu, RouteObject } from '~/types'
+import type {Menu, RouteObject} from '~/types'
 
-Date.prototype.format = function (fmt) {
+Date.prototype.format = function (fmt: string) {
   const o = {
     'M+': this.getMonth() + 1, // 月份
     'd+': this.getDate(), // 日
@@ -12,21 +12,32 @@ Date.prototype.format = function (fmt) {
     'q+': Math.floor((this.getMonth() + 3) / 3), // 季度
     'S': this.getMilliseconds(), // 毫秒
   }
-  if (/(y+)/.test(fmt))
+  if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(RegExp.$1, (`${this.getFullYear()}`).substr(4 - RegExp.$1.length))
+  }
 
   for (const k in o) {
-    if (new RegExp(`(${k})`).test(fmt))
+    if (new RegExp(`(${k})`).test(fmt)) {
       fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : ((`00${o[k]}`).substr((`${o[k]}`).length)))
+    }
   }
   return fmt
+}
+
+function randomString(len = 6) {
+  if (len <= 11) {
+    return Math.random().toString(36).substring(2, 2 + len).padEnd(len, '0');
+  } else {
+    return randomString(11) + randomString(len - 11);
+  }
 }
 
 function enCodePwd(data: object) {
   if (data && Object.keys(data).length !== 0) {
     for (const key in data) {
-      if (key.toLowerCase().includes('password'))
+      if (key.toLowerCase().includes('password')) {
         data[key] = new SparkMD5().append(data[key]).end()
+      }
     }
   }
 }
@@ -42,16 +53,18 @@ function handleIsTauri() {
 // 防抖：直到用户做完事情后才处理用户最后一次提交的事件
 // 相当于触发则进入等待重新定时直到事件最后一次触发然后再等时间有没有到，才把这定时器清除
 function debounce(fn: any, flag = true, delay = 300) {
-  if (!flag)
+  if (!flag) {
     return fn
+  }
   let timeoutId
   return function () {
     // eslint-disable-next-line @typescript-eslint/no-this-alias,@typescript-eslint/no-invalid-this
     const _self = this
     // eslint-disable-next-line prefer-rest-params
     const _args = arguments
-    if (timeoutId)
+    if (timeoutId) {
       clearTimeout(timeoutId)
+    }
 
     timeoutId = setTimeout(() => fn.apply(_self, _args), delay)
   }
@@ -62,16 +75,18 @@ function debounce(fn: any, flag = true, delay = 300) {
 function throttle(fn: any, flag = true, delay = 300) {
   flag = flag === undefined ? true : flag
   delay = delay === undefined ? 300 : delay
-  if (!flag)
+  if (!flag) {
     return fn
+  }
   let valid = true
   return function () {
     // eslint-disable-next-line @typescript-eslint/no-this-alias,@typescript-eslint/no-invalid-this
     const _self = this
     // eslint-disable-next-line prefer-rest-params
     const _args = arguments
-    if (!valid)
+    if (!valid) {
       return false
+    }
     valid = false
     setTimeout(() => {
       fn.apply(_self, _args)
@@ -81,10 +96,12 @@ function throttle(fn: any, flag = true, delay = 300) {
 }
 
 function handleMenuTree(dataList: Array<Menu>, parentId: number, breadcrumb: string, breadcrumbEn: string) {
-  if (dataList.length === 0)
+  if (dataList.length === 0) {
     return dataList
-  if (!parentId)
+  }
+  if (!parentId) {
     parentId = 0
+  }
   const newDataList = []
   for (const data of dataList) {
     if (parentId === data.parentId) {
@@ -142,22 +159,24 @@ function useScreenfullEffect() {
       if (screenfull.isFullscreen) {
         screenfull.toggle()
         isFullScreenTag.value = false
-      }
-      else {
+      } else {
         // 进入全屏
         screenfull.request(element)
         isFullScreenTag.value = true
       }
-    }
-    else {
+    } else {
       alert('提示：不支持切换全屏。')
     }
   }
-  return { isFullScreenTag, handleFullScreen }
+  return {
+    isFullScreenTag,
+    handleFullScreen
+  }
 }
 
 export {
   enCodePwd,
+  randomString,
   handleIsTauri,
   debounce,
   throttle,

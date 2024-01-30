@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {TableDataObject} from "~/types";
+import {TableColumnObject, TableDataObject} from "~/types";
 
 const aboutVisible = ref(false)
 const asadas = ref([])
@@ -14,78 +14,44 @@ const dt123 = ref('closeMenu(e){\n' +
   '          }')
 const tm = ref(1700470641000)
 
-const tableColumns = [
+const tableColumns: Array<TableColumnObject> = [
   {
     prop: "label",
     label: "列名",
-    visible: true,
     sortable: true,
-    filterable: true
+    filterable: true,
+    comment: '12312312312'
   },
   {
     prop: "visible",
     label: "显示",
-    width: 60,
-    visible: true,
     sortable: true,
     filterable: true
   },
   {
     prop: "sortable",
     label: "排序",
-    width: 60,
-    visible: true
+    sortable: true
   },
   {
     prop: "filter",
-    label: "筛选",
-    width: 60,
-    visible: true
+    label: "筛选"
   },
   {
     prop: "align",
     label: "对齐",
-    width: 100,
-    visible: true
+    width: 100
   },
   {
     prop: "fixed",
-    label: "固定",
-    width: 60,
-    visible: true
+    label: "固定"
   }
 ]
 const tableData: TableDataObject = {
-  count: 20,
-  data: [{label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示3', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示4', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2s', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示e', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示d', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示g', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名2', visible: '显示g', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名2', visible: '显示g', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名2', visible: '显示21', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名2', visible: '显示2qw', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名2', visible: '显示2r', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名3', visible: '显示gr', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名4', visible: '显示2t', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名5', visible: '显示2t', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名q', visible: '显示25', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名4', visible: '显示2h', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名r', visible: '显示2n', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名g', visible: '显示2x', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名d', visible: '显示2f', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名6', visible: '显示2ww', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名9', visible: '显示2hhh', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名4', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2d', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'},
-    {label: '列名1', visible: '显示2', sortable: '排序3', filter: '筛选4', align: '对齐5', fixed: '固定6'}],
+  count: 1000,
+  data: Array.from({ length: 1000 }).map((_, i) => {
+    return {label: '列名' + i, visible: '显示' + i, sortable: '排序' + i, filter: '筛选' + i, align: '对齐对齐对齐对齐对齐对齐对齐对齐对齐对齐对齐对齐对齐对齐对齐' + i, fixed: '固定' + i}
+  }),
   pageNum: 1
 }
 function click() {
@@ -108,6 +74,10 @@ function fileComplete(item: any) {
 function sortChange(item: any) {
   console.log(item)
 }
+
+onMounted(() => {
+})
+
 </script>
 
 <template>

@@ -36,14 +36,14 @@ const handleRoute = debounce((path: string, query: any) => {
 <template>
   <el-sub-menu v-if="menu.children && menu.children.length >= 1" :index="`${menu.menuId}`">
     <template #title>
-      <MSvgIcon :icon="menu.icon" size="1.7em" />
+      <MSvgIcon c-blue :icon="menu.icon" size="1.7em" />
       <span v-if="lang === 'en' && menu.menuNameEn" class="menu-font">{{ menu.menuNameEn }}</span>
       <span v-else class="menu-font">{{ menu.menuName }}</span>
     </template>
     <MenuTree v-for="item in menu.children" :key="item.menuId" :menu="item" />
   </el-sub-menu>
   <el-menu-item v-else :index="`${menu.menuId}`" @click="handleRoute(menu.path, menu.query)">
-    <MSvgIcon :icon="menu.icon" size="1.7em" />
+    <MSvgIcon c-blue :icon="menu.icon" size="1.7em" />
     <template #title>
       <span class="menu-font">{{ lang === 'en' && menu.menuNameEn ? menu.menuNameEn : menu.menuName }}</span>
     </template>

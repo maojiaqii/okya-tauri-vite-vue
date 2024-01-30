@@ -40,6 +40,8 @@ button:
   clear_sorts: 清空排序
   clear_filters: 清空筛选
   settings: 设置
+  reset: 重置
+  filter: 筛选
 message:
   loading: 正在加载,请耐心等待
   errorCode: 错误码：&nbsp;&nbsp;&nbsp;&nbsp;
@@ -68,9 +70,9 @@ upload-status:
   downloading: 下载中
   downloaded: 下载完成
 component:
-  placeholder_input: 请录入
+  placeholder_input: 请输入
   placeholder_select: 请选择
-  placeholder_input_or_select: 请录入或选择
+  placeholder_input_or_select: 请输入或选择
   placeholder_select_date: 请选择日期
   placeholder_select_time: 请选择时间
   sum_text: 合计

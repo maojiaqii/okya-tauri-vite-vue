@@ -8,7 +8,7 @@ const props = defineProps({
   // 颜色值
   color: {
     type: String,
-    default: '#1296db',
+    default: '',
   },
   // 宽高
   size: {
@@ -24,17 +24,18 @@ const iSize = computed(() => props.size)
 </script>
 
 <template>
-  <div v-if="isOnlineSvg"
+  <i v-if="isOnlineSvg"
        :style="{ '--svg-icon-url': `url(${icon})` }"
        class="svg-icon svg-icon-online"/>
-  <div v-else-if="isSvgXml"
+  <i v-else-if="isSvgXml"
        class="svg-icon"
        v-html="icon"/>
-  <svg v-else
-       class="svg-icon"
-       aria-hidden="true">
-    <use :xlink:href="`#icon-${icon}`"/>
-  </svg>
+  <i v-else>
+    <svg class="svg-icon"
+         aria-hidden="true">
+      <use :xlink:href="`#icon-${icon}`"/>
+    </svg>
+  </i>
 </template>
 
 <style scoped lang="scss">

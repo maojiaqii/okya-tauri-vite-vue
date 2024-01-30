@@ -124,21 +124,21 @@ function hasPerms(perms: string) {
 </script>
 
 <template>
-  <div v-if="circle && hasPerms(perms)" float-left ml-1 mb-1>
+  <div v-if="circle && hasPerms(perms)">
     <el-tooltip placement="top-start" :content="label" :show-after="1000" trigger="hover">
       <el-button :size="size" :type="type" :disabled="disabled" :loading="loading && app.loading" :text="text" circle :plain="plain" dark @click="click">
         <template v-if="icon" #icon>
-          <MSvgIcon color="var(--el-text-color-primary)" :icon="icon" />
+          <MSvgIcon :icon="icon" />
         </template>
       </el-button>
     </el-tooltip>
   </div>
-  <el-button float-left ml-1 mb-1 v-else-if="hasPerms(perms) && !circle" :round="round" :text="text" :size="size" :type="type" :loading="loading && app.loading" :disabled="disabled" :plain="plain" dark @click="click">
+  <el-button v-else-if="hasPerms(perms) && !circle" :round="round" :text="text" :size="size" :type="type" :loading="loading && app.loading" :disabled="disabled" :plain="plain" dark @click="click">
     <template v-if="icon" #icon>
-      <MSvgIcon color="var(--el-text-color-primary)" :icon="icon" />
+      <MSvgIcon :icon="icon" />
     </template>
     <slot :label="label">
-      <span style="color:var(--el-text-color-primary);">{{ label }}</span>
+      <span>{{ label }}</span>
     </slot>
   </el-button>
 </template>

@@ -119,7 +119,7 @@ const emits = defineEmits(['change', 'update:modelValue', 'optionSelected'])
 
 const { locale, t } = useI18n()
 const loadingSpan = ref()
-let ob
+let ob: IntersectionObserver
 const optionArray = ref([])
 const valueKeyOps = ref(props.valueKey)
 const labelKeyOps = ref(props.labelKey)

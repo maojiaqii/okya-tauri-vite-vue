@@ -32,6 +32,6 @@ const props = defineProps({
 
 <style scoped lang="scss">
 .el-divider--horizontal {
-  margin: 10px 0 10px 0;
+  margin: 10px 0;
 }
 </style>

@@ -40,6 +40,8 @@ button:
   clear_sorts: clear sorts
   clear_filters: clear filters
   settings: settings
+  reset: reset
+  filter: confirm
 message:
   loading: Loading, please wait
   errorCode: ErrCode：&nbsp;

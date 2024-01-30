@@ -32,6 +32,7 @@ declare interface TableDataObject {
   pageNum: number,
   count: number,
 }
+
 declare interface TableColumnObject {
   prop: string,
   label: string,
@@ -45,6 +46,7 @@ declare interface TableColumnObject {
   align?: string,
   component?: object,
   sum?: boolean,
+  overflowTooltip?: boolean,
   formatter?: (
     row: T,
     column: TableColumnCtx<T>,
@@ -52,6 +54,15 @@ declare interface TableColumnObject {
     index: number
   ) => VNode | string,
   children?: Array<TableColumnObject>
+}
+
+declare interface TableProperties {
+  border: boolean,
+  showSum: boolean,
+  showCheckBox: boolean,
+  showRowNum: boolean,
+  pagination: boolean,
+  showOperation: boolean
 }
 
 declare interface ValabelObject {

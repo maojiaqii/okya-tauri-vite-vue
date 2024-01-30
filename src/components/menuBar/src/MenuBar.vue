@@ -13,7 +13,7 @@ const svgIconVisible = ref(false)
 const menus = ref([])
 
 const menuButtonLeft = computed(() => {
-  return `${(app.menuCollapse ? app.collapseWidth : app.expendWidth) - 1.3}em`
+  return `${(app.menuCollapse ? app.collapseWidth : app.expendWidth) - 0.9}em`
 })
 
 function getMenus() {

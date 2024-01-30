@@ -489,10 +489,8 @@ onMounted(() => {
     </uploader-list>
     <div>
       <uploader-btn id="global-uploader-btn" ref="uploadBtnRef" :attrs="{ accept: typeof props.accept === 'object' ? props.accept.join() : props.accept }">
-        <a class="uploader-btn-class" :title="t('button.upload')">
-          <svg w="1em" h="1em">
-            <use xlink:href="#icon-upload" />
-          </svg>
+        <a class="uploader-btn-class icon-btn" :title="t('button.upload')">
+          <MSvgIcon size="1em" icon="upload"/>
         </a>
       </uploader-btn>
     </div>
